@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sơ đồ tư duy chi tiết - Hệ Điều Hành</title>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    svg {
+      width: 100%;
+      height: 100vh;
+    }
+
+    .header {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    .header p {
+      margin: 5px 0 0;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1>Sơ đồ tư duy chi tiết: Hệ Điều Hành</h1>
+    <p>Cuộn chuột để Zoom • Kéo thả để Di chuyển</p>
+  </div>
+
+  <div class="markmap">
+    <script type="text/template">
+# Hệ Điều Hành (OS)
+
+## CHƯƠNG 5: Đồng Bộ Tiến Trình
+### 1. Vấn Đề Cơ Bản
+- **Race Condition (Tình trạng cạnh tranh):** 
+  - *Định nghĩa:* Các tiến trình truy cập đồng thời vào dữ liệu chia sẻ; kết quả cuối cùng phụ thuộc thứ tự thực thi.
+  - *Ví dụ:* Bài toán Producer vs Consumer (`count++` / `count--`), Cấp phát PID (hàm `fork()` gọi cùng lúc).
+  - *Hậu quả:* Dữ liệu bị sai lệch và không nhất quán.
+- **Vùng Tranh Chấp (Critical Section - CS):**
+  - Đoạn code nơi tiến trình tác động lên dữ liệu chia sẻ.
+  - Cấu trúc: `Entry section` (xin quyền) $\rightarrow$ `Critical section` $\rightarrow$ `Exit section` (trả quyền) $\rightarrow$ `Remainder section`.
+- **3 Yêu cầu đối với lời giải:**
+  1. *Mutual Exclusion (Loại trừ tương hỗ):* Tại một thời điểm, chỉ 1 tiến trình được thực thi trong CS.
+  2. *Progress (Tiến triển):* Tiến trình nằm ngoài CS không được cản tiến trình khác vào CS (tránh Deadlock).
+  3. *Bounded Waiting (Chờ đợi giới hạn):* Thời gian chờ vào CS phải có giới hạn (tránh Starvation).
+
+### 2. Các Giải Pháp Cơ Bản (Ngắt & Phần cứng)
+- **Phân loại theo hệ điều hành:**
+  - *Busy waiting:* Tiến trình chạy vòng lặp liên tục để chờ (tốn CPU).
+  - *Sleep & Wake up:* Tiến trình tự block (ngủ) và được đánh thức khi đến lượt.
+- **Giải pháp bằng phần mềm (Ngắt):**
+  - *Giải pháp 1:* Dùng biến `turn` $\rightarrow$ Đảm bảo Mutual Exclusion nhưng lỗi Progress và Bounded Waiting.
+  - *Giải pháp 2:* Dùng mảng `flag[]` $\rightarrow$ Chưa hoàn chỉnh.
+  - *Giải pháp Peterson:* Kết hợp `turn` và `flag[]`. Đảm bảo đủ 3 yêu cầu. 
+  - *Vấn đề kiến trúc hiện đại:* Vi xử lý tối ưu hay sắp xếp lại thứ tự lệnh độc lập $\rightarrow$ Gây lỗi cho Peterson. Cần dùng lệnh **Memory Barrier** để bắt buộc thứ tự đồng bộ lên toàn hệ thống.
+- **Giải pháp phần cứng:** 
+  - Lệnh nguyên thuỷ không thể bị cắt ngang: `Test_and_set`, `Compare_and_swap`.
+
+### 3. Công Cụ Đồng Bộ Cấp Cao
+- **Mutex Locks (Khóa loại trừ):**
+  - *Cơ chế:* Như ổ khoá, gọi `acquire()` (khoá) trước CS và `release()` (mở) sau CS.
+  - *Các loại:* Spinlock (busy waiting) và Lock/Sleep (chủ động block tiến trình vào hàng chờ).
+- **Semaphore (S):**
+  - *Định nghĩa:* Biến nguyên S quản lý tài nguyên qua `wait()` (P/giảm) và `signal()` (V/tăng).
+  - *Phân loại:* 
+    - Binary Semaphore (0 hoặc 1): Giống Mutex.
+    - Counting Semaphore: Quản lý nhiều tài nguyên.
+  - *Cài đặt:* Để tránh Busy waiting, kết nối Semaphore với danh sách chờ (Queue) sử dụng `block()` và `wakeup()`.
+  - *Ứng dụng:* Đảm bảo Mutual exclusion, đồng bộ thứ tự thực thi (vd S1 chạy trước S2), đảm bảo giới hạn tài nguyên.
+  - *Vấn đề:* Cần cẩn thận khi code, dễ xảy ra Deadlock nếu gọi `wait` lồng nhau sai thứ tự.
+- **Monitor:**
+  - *Khái niệm:* Một Abstract Data Type (kiểu dữ liệu trừu tượng). Tự động gói biến, hàm thành phần kín, mỗi lần chỉ 1 tiến trình được gọi thủ tục bên trong.
+  - *Condition Variables (Biến điều kiện x, y):* Cho phép tiến trình tự gọi `x.wait()` (chờ sự kiện) và `x.signal()` (đánh thức tiến trình khác).
+
+### 4. Vấn Đề Liveness
+- **Liveness:** Các tính chất đảm bảo tiến trình thực sự "sống" (được chạy).
+- **Deadlock (Tắc nghẽn):** Hai (hay nhiều) tiến trình chờ vô thời hạn sự kiện mà chỉ tiến trình trong nhóm đó mới làm được.
+- **Starvation (Đói tài nguyên):** Tiến trình nằm kẹt mãi trong hàng đợi Semaphore không được thực thi.
+- **Priority Inversion (Nghịch đảo ưu tiên):** Tiến trình ưu tiên thấp giữ khoá của tiến trình ưu tiên cao $\rightarrow$ Xử lý bằng giao thức Kế thừa ưu tiên (Priority inheritance).
+
+### 5. Các Bài Toán Đồng Bộ Kinh Điển
+- **Bounded-Buffer (Mảng giới hạn):**
+  - Vấn đề Producer (thêm phần tử) & Consumer (xóa phần tử).
+  - Giải pháp: Dùng Semaphore `empty` (n), `full` (0) và `mutex` (1).
+- **Readers-Writers:**
+  - Nhiều Reader được đọc cùng lúc. Ghi (Writer) phải được thao tác độc lập (không ai đọc, không ai ghi).
+  - *Ưu tiên Reader:* Writer dễ bị đói (starvation).
+  - *Ưu tiên Writer:* Reader dễ bị đói. Cần `rw_mutex`, `mutex`, `read_count`.
+- **Dining-Philosophers (Triết gia ăn tối):**
+  - 5 triết gia ngồi bàn tròn, 5 chiếc đũa. Triết gia phải có đủ 2 đũa mới được ăn.
+  - *Nguy cơ Deadlock:* Ai cũng nhặt đũa trái trước.
+  - *Cách khắc phục:* Chỉ 4 người ngồi, hoặc phải có cả 2 đũa mới nhặt, hoặc người chẵn nhặt đũa phải trước, người lẻ nhặt đũa trái trước.
+
+## CHƯƠNG 7: Quản Lý Bộ Nhớ
+### 1. Khái Niệm Cơ Sở
+- Hệ điều hành cần: Cấp phát, tái định vị (relocation), bảo vệ, chia sẻ vùng nhớ.
+- **Các loại địa chỉ nhớ:**
+  - *Địa chỉ Vật lý (Physical Address):* Vị trí thực tế trên thanh RAM.
+  - *Địa chỉ Luận lý (Logical / Virtual Address):* Địa chỉ sinh ra bởi CPU trong chương trình.
+- **Thời điểm chuyển đổi địa chỉ (Address Binding):**
+  1. Compile time: Gán cứng (Absolute address).
+  2. Load time: Tính toán khi nạp (Relative address).
+  3. Execution time: Trì hoãn tới lúc chạy (Dùng phần cứng ánh xạ).
+- **Dynamic Linking / Loading:** Nạp/Liên kết thư viện (.DLL, .so) khi được gọi $\rightarrow$ Tiết kiệm RAM, chia sẻ chung một bản copy của thư viện cho nhiều tiến trình.
+
+### 2. Mô Hình Quản Lý Phân Vùng
+- **Phân mảnh (Fragmentation):**
+  - *Nội (Internal):* Vùng cấp phát dư thừa so với kích thước cần.
+  - *Ngoại (External):* Tổng trống đủ nhưng nằm rải rác không liền kề.
+- **Phân vùng Cố định (Fixed Partitioning):**
+  - Chia RAM thành nhiều phần tĩnh. Dễ bị *Phân mảnh nội* rất lớn.
+- **Phân vùng Động (Dynamic Partitioning):**
+  - Cấp vùng nhớ kích thước vừa in cho tiến trình. Gây *Phân mảnh ngoại*. Cần dùng thao tác kết khối (Compaction) tốn chi phí.
+  - Các chiến lược xếp chỗ:
+    - *Best-fit:* Nhỏ nhất vừa đủ.
+    - *First-fit:* Vừa đủ đầu tiên tìm thấy.
+    - *Worst-fit:* Lớn nhất.
+    - *Next-fit:* Vừa đủ đầu tiên từ vị trí trước.
+
+### 3. Phân Trang (Paging)
+- **Khái niệm cơ bản:**
+  - Chia không gian Vật lý thành **Frames** (Khung trang).
+  - Chia không gian Ảo thành **Pages** (Trang). Kích thước Frame = Page = lũy thừa 2 (vd 4KB).
+  - Không cần lưu trữ liên tục.
+- **Chuyển đổi địa chỉ:**
+  - Địa chỉ ảo chia 2 phần: Page number (`p`) và Page offset (`d`).
+  - Dùng **Page Table (Bảng phân trang):** tra cứu từ `p` $\rightarrow$ Frame number.
+- **Phần cứng hỗ trợ (TLB):**
+  - Page Table lưu ở RAM tốn gấp đôi thời gian truy cập.
+  - *Translation Look-aside Buffers (TLB):* Bộ nhớ đệm tra cứu siêu nhanh.
+  - Công thức EAT (Effective Access Time): EAT = (ε + x)α + (ε + 2x)(1 - α)
+- **Bảo vệ:**
+  - Dùng *Protection bits* (Read/Write/Execute).
+  - Dùng *Valid/Invalid bit* để cấm truy cập phần tử rác.
+- **Hoán vị (Swapping):** Tiến trình có thể Swap out (đưa ra đĩa) và Swap in (đưa vào lại) dựa theo Round-robin hoặc Priority.
+
+## CHƯƠNG 8: Bộ Nhớ Ảo
+### 1. Tổng Quan
+- **Bộ nhớ ảo (Virtual Memory):** Không cần nạp toàn bộ chương trình vào RAM để chạy.
+- Lợi ích: Tăng mức độ đa chương, chạy được phần mềm nặng hơn RAM thực, tạo vùng nhớ Swap space trên ổ đĩa.
+
+### 2. Phân Trang Theo Yêu Cầu (Demand Paging)
+- **Cơ chế:** Trang nào thực sự cần (truy cập tới) mới được nạp.
+- **Page-Fault (Lỗi trang):** Xảy ra khi HĐH bắt ngắt lúc tiến trình cố truy cập trang chưa có trong RAM (valid/invalid bit = invalid).
+- **Quy trình xử lý Page-Fault (PFSR):**
+  1. HĐH block tiến trình.
+  2. Yêu cầu đọc từ ổ cứng, tìm Frame trống và đổ dữ liệu vào. 
+  3. Cập nhật bảng trang, đưa tiến trình về ready.
+- **Nếu không có Frame trống:** Cần thực hiện Thuật toán thay thế trang (Page-replacement) để đẩy 1 trang đi (Victim page).
+
+### 3. Các Giải Thuật Thay Thế Trang
+- Mục tiêu: Giảm thiểu Page-Fault xuống thấp nhất.
+- **FIFO (First-In First-Out):**
+  - Thay trang nạp vào sớm nhất.
+  - Gặp *Nghịch lý Belady (Belady's Anomaly)*: Tăng khung trang chưa chắc đã giảm lỗi, thậm chí lỗi tăng lên.
+- **OPT (Optimal):**
+  - Thay trang mà lâu nhất ở tương lai mới dùng lại.
+  - Tốt nhất lý thuyết, nhưng không thể hiện thực (HĐH không thể đoán tương lai). Dùng làm mốc so sánh.
+- **LRU (Least Recently Used):**
+  - Thay trang ít được sử dụng nhất trong khoảng thời gian qua (thời gian tính từ quá khứ).
+  - Khắc phục nhược điểm FIFO. Yêu cầu hỗ trợ phần cứng (ghi nhận thời điểm) $\rightarrow$ Chi phí tìm kiếm cao.
+
+### 4. Vấn Đề Cấp Phát Khung Trang (Frames Allocation)
+- **Cấp tĩnh:** 
+  - *Chia đều:* Mọi tiến trình nhận lượng Frame như nhau.
+  - *Chia tỉ lệ:* Theo kích thước, tiến trình bự nhận nhiều Frame.
+  - *Chia theo Priority:* Mức độ ưu tiên cao nhận nhiều.
+- **Cấp động:** Thay đổi theo nhu cầu và tỷ lệ Page-fault.
+
+### 5. Sự Trì Trệ Hệ Thống (Thrashing)
+- **Hiện tượng Thrashing:** 
+  - Hệ thống cấp cho tiến trình quá ít Frame.
+  - Tỉ lệ Page-fault cực cao, CPU dành toàn bộ thời gian hoán chuyển trang thay vì tính toán $\rightarrow$ Hiệu suất tụt dốc thảm hại.
+- **Mô hình Cục Bộ (Locality):** Tiến trình thường truy cập thành từng cụm trang kế cận nhau trong một mốc thời gian.
+- **Working-Set Model:**
+  - Khoảng thời gian $\Delta$ theo dõi, $WSS$ = Số lượng trang mà tiến trình thực sự cần.
+  - HĐH tính tổng $D = \sum WSS_i$.
+  - Nếu Tổng $D$ > Kích thước bộ nhớ $m$ $\rightarrow$ Xảy ra Thrashing $\rightarrow$ HĐH phải tạm đóng băng (Swap out) bớt tiến trình.
+        </script>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.17.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-autoloader@0.17.0"></script>
+</body>
+
+</html>
