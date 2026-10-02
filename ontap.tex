@@ -1,0 +1,866 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{vietnam}
+\usepackage[left=2cm,right=2cm,top=2.5cm,bottom=2.5cm,headheight=18pt]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{makecell}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+\usepackage[colorlinks=true,linkcolor=blue!70!black,urlcolor=blue!70!black,citecolor=blue!70!black]{hyperref}
+
+% Thiết lập header & footer
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textbf{Tài liệu ôn tập Hệ điều hành}}
+\lhead{\leftmark}
+\rfoot{Trang \thepage}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% Định dạng tiêu đề section
+\titleformat{\section}{\Large\bfseries\color{blue!80!black}}{\thesection.}{0.5em}{}[\titlerule]
+\titleformat{\subsection}{\large\bfseries\color{teal!80!black}}{\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{black}}{\thesubsubsection.}{0.5em}{}
+
+% Màu sắc cho box và code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.96,0.97,0.98}
+\definecolor{boxborder}{rgb}{0.2,0.4,0.7}
+\definecolor{boxbg}{rgb}{0.94,0.97,1.0}
+
+% Cấu hình listings cho mã nguồn
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen}\itshape,
+    keywordstyle=\color{blue}\bfseries,
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=6pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    frame=single,
+    framerule=0.5pt,
+    rulecolor=\color{gray!40}
+}
+\lstset{style=mystyle}
+
+% Định nghĩa các hộp ghi chú đẹp
+\newtcolorbox{importantbox}[1][]{
+  colback=red!5!white,
+  colframe=red!75!black,
+  fonttitle=\bfseries,
+  title={LƯU Ý QUAN TRỌNG ĐI THI: #1},
+  arc=3mm,
+  boxrule=1pt
+}
+
+\newtcolorbox{summarybox}[1][]{
+  colback=boxbg,
+  colframe=boxborder,
+  fonttitle=\bfseries,
+  title={KHÁI NIỆM CỐT LÕI: #1},
+  arc=3mm,
+  boxrule=0.8pt
+}
+
+\newtcolorbox{examplebox}[1][]{
+  colback=green!5!white,
+  colframe=green!60!black,
+  fonttitle=\bfseries,
+  title={BÀI TẬP VÍ DỤ: #1},
+  arc=3mm,
+  boxrule=0.8pt
+}
+
+\begin{document}
+
+% Trang tiêu đề
+\begin{titlepage}
+    \centering
+    \vspace*{1.5cm}
+    
+    {\Huge \bfseries HỆ ĐIỀU HÀNH}\\[0.5cm]
+    {\LARGE \bfseries (OPERATING SYSTEMS)}\\[1.5cm]
+    
+    \rule{\linewidth}{1.5pt}\\[0.4cm]
+    {\huge \bfseries ĐỀ CƯƠNG ÔN TẬP TOÀN DIỆN ĐI THI}\\[0.2cm]
+    \rule{\linewidth}{1.5pt}\\[1.5cm]
+    
+    \textbf{\Large Trọng tâm ôn tập:}\\[0.3cm]
+    \large
+    \textbf{Chương 5:} Đồng bộ tiến trình (Process Synchronization)\\
+    \textbf{Chương 7:} Quản lý bộ nhớ (Memory Management)\\
+    \textbf{Chương 8:} Bộ nhớ ảo (Virtual Memory)\\[2cm]
+    
+    \begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,width=0.85\linewidth,arc=2mm]
+    \centering
+    \textbf{Tài liệu tổng hợp chuẩn xác, đầy đủ ý, in đậm từ khóa cốt lõi}\\
+    \textit{Kèm hướng dẫn giải chi tiết các dạng bài tập tính toán trọng tâm}
+    \end{tcolorbox}
+    
+    \vfill
+    {\large \textbf{Tháng 10 / 2026}}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% =========================================================================
+% PHẦN 1: CHƯƠNG 5
+% =========================================================================
+\section{CHƯƠNG 5: ĐỒNG BỘ TIẾN TRÌNH (PROCESS SYNCHRONIZATION)}
+
+\subsection{Race Condition và Vùng tranh chấp (Critical Section)}
+
+\begin{summarybox}[Race Condition (Nghịch cảnh đua tranh)]
+\textbf{Race Condition} là hiện tượng xảy ra khi nhiều tiến trình (hoặc luồng) \textbf{cùng truy cập và thao tác đồng thời trên dữ liệu chia sẻ}. Kết quả thực thi cuối cùng \textbf{phụ thuộc vào thứ tự đan xen lệnh} của các tiến trình đó, dẫn đến nguy cơ dữ liệu bị \textbf{sai lệch và không nhất quán (inconsistency)}.
+\end{summarybox}
+
+\subsubsection*{Nguyên nhân từ mức máy (Ví dụ bài toán Producer - Consumer):}
+Lệnh tăng và giảm ở ngôn ngữ bậc cao thực chất gồm 3 chỉ thị ở mức hợp ngữ:
+\begin{itemize}[noitemsep]
+    \item \texttt{count++} $\rightarrow$ \texttt{reg1 = count; reg1 = reg1 + 1; count = reg1;}
+    \item \texttt{count--} $\rightarrow$ \texttt{reg2 = count; reg2 = reg2 - 1; count = reg2;}
+\end{itemize}
+Khi hết quantum time và chuyển ngữ cảnh giữa chừng, các chỉ thị này đan xen nhau khiến giá trị \texttt{count} cuối cùng bị sai.
+
+\begin{summarybox}[Critical Section (Vùng tranh chấp)]
+\textbf{Critical Section (CS)} là đoạn mã lệnh mà ở đó tiến trình \textbf{thao tác trên dữ liệu dùng chung} (ghi biến, cập nhật bảng, ghi tệp tin). Để bảo vệ dữ liệu, tại một thời điểm chỉ cho phép duy nhất một tiến trình thực thi trong CS của nó.
+\end{summarybox}
+
+\textbf{Mô hình chuẩn của tiến trình truy cập CS:}
+\begin{lstlisting}[language=C]
+while (true) {
+    entry section      // Xin quyen truy cap vao CS
+        critical section   // Thao tac tren du lieu dung chung
+    exit section       // Thong bao da roi CS, mo khoa cho tien trinh khac
+        remainder section  // Cac ma lenh con lai khong tranh chap
+}
+\end{lstlisting}
+
+---
+
+\subsection{Ba yêu cầu bắt buộc đối với lời giải cho Critical Section}
+\begin{importantbox}[3 YÊU CẦU BẮT BUỘC (RẤT HAY HỎI THI)]
+Mọi giải pháp giải quyết bài toán vùng tranh chấp bắt buộc phải thỏa mãn đồng thời 3 điều kiện:
+\begin{enumerate}
+    \item \textbf{Loại trừ tương hỗ (Mutual Exclusion):} Khi một tiến trình đang thực thi trong Critical Section của nó thì \textbf{không có bất kỳ tiến trình nào khác} được thực thi trong CS của chúng.
+    \item \textbf{Tiến triển (Progress):} Nếu không có tiến trình nào trong CS và có các tiến trình muốn vào CS, thì \textbf{chỉ những tiến trình không ở trong remainder section} mới được tham gia quyết định tiến trình tiếp theo được vào. Tiến trình bên ngoài không được cản trở tiến trình khác vào CS (ngăn ngừa \textbf{Deadlock}).
+    \item \textbf{Chờ đợi có giới hạn (Bounded Waiting):} Phải có một \textbf{giới hạn xác định} về số lần các tiến trình khác được phép vào CS sau khi một tiến trình đã yêu cầu vào và trước khi yêu cầu đó được chấp thuận (ngăn ngừa \textbf{Starvation - đói tài nguyên}).
+\end{enumerate}
+\end{importantbox}
+
+---
+
+\subsection{Các giải pháp phần mềm và Giải thuật Peterson}
+
+\subsubsection{1. Giải pháp vô hiệu hóa ngắt (Disable Interrupts)}
+\begin{itemize}[noitemsep]
+    \item \textbf{Cơ chế:} \texttt{entry section} gọi tắt ngắt; \texttt{exit section} bật lại ngắt.
+    \item \textbf{Nhược điểm:} Nguy hiểm nếu CS lặp vô tận (hệ thống bị tê liệt). \textbf{Không hoạt động trên hệ thống đa CPU (Multiprocessor)} vì việc tắt ngắt trên một CPU không thể cấm các CPU khác truy cập bộ nhớ chung.
+\end{itemize}
+
+\subsubsection{2. Giải pháp phần mềm 1 (Dùng biến \texttt{turn})}
+\begin{itemize}[noitemsep]
+    \item \textbf{Cơ chế:} Chia sẻ biến \texttt{int turn;}. Tiến trình $P_i$ chờ \texttt{while (turn == j);}, sau CS gán \texttt{turn = j;}.
+    \item \textbf{Đánh giá:} Thỏa Mutual Exclusion nhưng \textbf{vi phạm Progress và Bounded Waiting} do ép buộc luân phiên gượng ép (\textit{strict alternation}). Nếu $P_j$ ở remainder section hoặc kết thúc, $P_i$ sẽ bị chặn vĩnh viễn dù CS đang rảnh.
+\end{itemize}
+
+\subsubsection{3. Giải pháp phần mềm 2 (Dùng mảng \texttt{flag[]})}
+\begin{itemize}[noitemsep]
+    \item \textbf{Cơ chế:} \texttt{boolean flag[2];}. Tiến trình $P_i$ đặt \texttt{flag[i] = true;}, sau đó kiểm tra \texttt{while (flag[j]);}. Rời CS đặt \texttt{flag[i] = false;}.
+    \item \textbf{Đánh giá:} Thỏa Mutual Exclusion nhưng \textbf{vi phạm Progress} vì nếu cả hai cùng đặt cờ \texttt{flag} lên \texttt{true} đồng thời, cả hai sẽ cùng chờ nhau vô hạn (\textbf{Deadlock}).
+\end{itemize}
+
+\subsubsection{4. Giải thuật Peterson (Hoàn chỉnh cho 2 tiến trình)}
+Kết hợp cả 2 biến \texttt{flag[2]} và \texttt{turn}:
+\begin{lstlisting}[language=C]
+// Ma nguon tien trinh P_i (tien trinh doi thu la P_j)
+while (true) {
+    flag[i] = true;                 // 1. P_i san sang vao CS
+    turn = j;                       // 2. Nhuong luot cho P_j
+    while (flag[j] && turn == j);   // 3. Cho neu P_j muon vao VA dang la luot cua P_j
+    
+    /* CRITICAL SECTION */
+    
+    flag[i] = false;                // 4. Roi CS, ha co
+    
+    /* REMAINDER SECTION */
+}
+\end{lstlisting}
+
+\textbf{Đánh giá giải thuật Peterson:}
+\begin{itemize}[noitemsep]
+    \item Đảm bảo thỏa mãn \textbf{cả 3 điều kiện}: Mutual Exclusion, Progress và Bounded Waiting.
+    \item \textbf{Hạn chế trên kiến trúc máy tính hiện đại:} Các CPU hiện đại và trình biên dịch có cơ chế tối ưu \textbf{sắp xếp lại thứ tự chỉ thị (Instruction Reordering)} đối với các thao tác độc lập (đảo thứ tự gán \texttt{flag[i]} và \texttt{turn}), dẫn đến giải thuật bị sai lệch.
+    \item \textbf{Khắc phục:} Sử dụng rào chắn bộ nhớ (\textbf{Memory Barrier}).
+\end{itemize}
+
+---
+
+\subsection{Các giải pháp hỗ trợ từ phần cứng}
+\begin{enumerate}
+    \item \textbf{Memory Barrier:} Chỉ thị phần cứng ép buộc mọi thao tác đọc/ghi bộ nhớ trước nó phải được hoàn tất và hiển thị cho toàn bộ hệ thống CPU trước khi các lệnh sau nó được thực hiện.
+    \item \textbf{Lệnh \texttt{test\_and\_set}:} Thao tác phần cứng \textbf{đơn nguyên (atomic)} đọc giá trị cũ và ghi đè giá trị mới là \texttt{true}:
+\begin{lstlisting}[language=C]
+boolean test_and_set(boolean *target) {
+    boolean rv = *target;
+    *target = true;
+    return rv;
+}
+// Ap dung: while (test_and_set(&lock)); /* CS */ lock = false;
+\end{lstlisting}
+    \item \textbf{Lệnh \texttt{compare\_and\_swap} (CAS):} Thao tác đơn nguyên so sánh giá trị bộ nhớ với giá trị kỳ vọng, chỉ cập nhật nếu bằng nhau:
+\begin{lstlisting}[language=C]
+int compare_and_swap(int *value, int expected, int new_value) {
+    int temp = *value;
+    if (*value == expected) *value = new_value;
+    return temp;
+}
+// Ap dung: while (compare_and_swap(&lock, 0, 1) != 0); /* CS */ lock = 0;
+\end{lstlisting}
+    \item \textbf{Biến đơn nguyên (Atomic Variables):} Hỗ trợ thực hiện các phép toán cơ bản (như cộng, trừ) trên kiểu dữ liệu số mà không bị ngắt quãng.
+\end{enumerate}
+
+---
+
+\subsection{Khóa Mutex (Mutex Locks)}
+Khóa Mutex (Mutual Exclusion Lock) là công cụ đồng bộ cấp cao đơn giản nhất. Tiến trình gọi \texttt{acquire()} để lấy khóa trước khi vào CS và \texttt{release()} để nhả khóa khi ra khỏi CS.
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\textwidth}{p{3cm} X X}
+\toprule
+\textbf{Đặc điểm} & \textbf{Spinlock (Busy Waiting)} & \textbf{Mutex Sleep - Wakeup (Non-busy waiting)} \\
+\midrule
+\textbf{Cơ chế chờ} & Lặp liên tục kiểm tra biến cờ (\texttt{while (!available);}). & Gọi \texttt{block()} đưa tiến trình vào hàng đợi \textbf{ngủ}; khi mở khóa gọi \texttt{wakeup()} đánh thức. \\
+\textbf{Sử dụng CPU} & \textbf{Lãng phí chu kỳ CPU} do bận lặp. & \textbf{Tiết kiệm CPU}, nhường CPU cho tiến trình khác. \\
+\textbf{Chi phí chuyển ngữ cảnh} & Không phát sinh chi phí chuyển ngữ cảnh. & Tốn chi phí lưu và phục hồi trạng thái tiến trình (PCB). \\
+\textbf{Ngữ cảnh tối ưu} & Dùng khi \textbf{thời gian thực thi trong CS rất ngắn} (thường dùng trong nhân OS, hệ thống đa xử lý). & Dùng khi \textbf{thời gian trong CS dài} hoặc hệ thống đơn vi xử lý. \\
+\bottomrule
+\end{tabularx}
+\caption{So sánh giữa Spinlock và Mutex Non-busy waiting}
+\end{table}
+
+---
+
+\subsection{Semaphore (Đèn hiệu)}
+
+\begin{summarybox}[Định nghĩa Semaphore]
+Semaphore $S$ là một \textbf{biến số nguyên} chỉ có thể truy xuất thông qua 2 thao tác đơn nguyên cơ bản: \texttt{wait(S)} (hay $P(S)$) và \texttt{signal(S)} (hay $V(S)$).
+\end{summarybox}
+
+\subsubsection{1. Phân loại Semaphore}
+\begin{itemize}[noitemsep]
+    \item \textbf{Counting Semaphore:} Giá trị là số nguyên không giới hạn, dùng để \textbf{quản lý số lượng tài nguyên khả dụng}.
+    \item \textbf{Binary Semaphore:} Giá trị chỉ là \textbf{0} hoặc \textbf{1}, có chức năng tương đương Khóa Mutex.
+\end{itemize}
+
+\subsubsection{2. Hiện thực Semaphore không Busy Waiting}
+\begin{lstlisting}[language=C]
+typedef struct {
+    int value;
+    struct process *list; // Hang doi cac tien trinh dang ngu
+} semaphore;
+
+void wait(semaphore *S) {
+    S->value--;
+    if (S->value < 0) {
+        // Them tien trinh hien tai vao S->list
+        block(); // Tam dung va dua vao trang thai ngu
+    }
+}
+
+void signal(semaphore *S) {
+    S->value++;
+    if (S->value <= 0) {
+        // Lay mot tien trinh P ra khoi S->list
+        wakeup(P); // Danh thuc P va dua vao Ready queue
+    }
+}
+\end{lstlisting}
+
+\begin{importantbox}[Ý NGHĨA GIÁ TRỊ CỦA SEMAPHORE (CỰC KỲ QUAN TRỌNG)]
+\begin{itemize}[noitemsep]
+    \item Khi $\mathbf{S\text{->value} \ge 0}$: Biểu thị \textbf{số tài nguyên còn trống khả dụng} (số lần tiến trình có thể gọi \texttt{wait()} mà không bị chặn).
+    \item Khi $\mathbf{S\text{->value} < 0}$: Độ lớn tuyệt đối $|\mathbf{S\text{->value}}|$ chính là \textbf{số lượng tiến trình đang bị tắc nghẽn (blocked)} và nằm trong hàng đợi \texttt{S->list}.
+\end{itemize}
+\end{importantbox}
+
+\subsubsection{3. Ba ứng dụng kinh điển của Semaphore}
+\begin{enumerate}[noitemsep]
+    \item \textbf{Bảo vệ Critical Section:} Khởi tạo \texttt{sem = 1;}. Trước CS gọi \texttt{wait(sem)}, sau CS gọi \texttt{signal(sem)}.
+    \item \textbf{Quy định thứ tự thực thi:} Để đoạn lệnh $S_1$ (của $P_1$) luôn chạy trước $S_2$ (của $P_2$), khởi tạo \texttt{synch = 0;}. $P_1$ chạy xong $S_1$ gọi \texttt{signal(synch);}. $P_2$ muốn chạy $S_2$ phải gọi \texttt{wait(synch);}.
+    \item \textbf{Quản lý số lượng tài nguyên hữu hạn:} Khởi tạo \texttt{sem = N} (với $N$ là tổng số tài nguyên).
+\end{enumerate}
+
+---
+
+\subsection{Monitor và Biến điều kiện (Condition Variables)}
+\begin{itemize}
+    \item \textbf{Monitor:} Là kiểu dữ liệu trừu tượng (ADT) cấp cao đóng gói dữ liệu dùng chung và các thủ tục. Điểm then chốt: \textbf{Monitor tự động đảm bảo loại trừ tương hỗ (Mutual Exclusion)} -- tại một thời điểm chỉ duy nhất 1 tiến trình được thực thi bên trong monitor.
+    \item \textbf{Condition Variable (Biến điều kiện):} Cung cấp cơ chế cho tiến trình tạm dừng và chờ đợi bên trong monitor. Khai báo: \texttt{condition x;}.
+    \begin{itemize}[noitemsep]
+        \item \texttt{x.wait()}: Tiến trình bị block và chuyển vào \textit{condition queue x}, nhường quyền monitor cho tiến trình khác.
+        \item \texttt{x.signal()}: Đánh thức đúng 1 tiến trình đang chờ trên $x$. Nếu không có tiến trình nào chờ, lệnh này \textbf{không có tác dụng} (khác với semaphore sẽ tăng biến đếm).
+    \end{itemize}
+\end{itemize}
+
+---
+
+\subsection{Vấn đề Liveness}
+\begin{itemize}
+    \item \textbf{Liveness:} Đặc tính đảm bảo hệ thống duy trì sự tiến triển (tiến trình không bị dừng vô hạn).
+    \item \textbf{Deadlock (Tắc nghẽn/Bế tắc):} Hai hay nhiều tiến trình cùng chờ đợi một sự kiện mà sự kiện đó chỉ có thể được tạo ra bởi chính một trong các tiến trình đang chờ.
+    \item \textbf{Starvation (Đói tài nguyên):} Tiến trình bị hoãn vô hạn trong hàng đợi, không bao giờ được cấp tài nguyên.
+    \item \textbf{Priority Inversion (Nghịch đảo độ ưu tiên):} Hiện tượng tiến trình có độ ưu tiên cao ($H$) bị chặn do tiến trình ưu tiên thấp ($L$) đang giữ khóa, trong khi tiến trình ưu tiên trung bình ($M$) lại chiếm CPU của $L$.
+    \item \textbf{Giải pháp:} Giao thức thừa hưởng ưu tiên (\textbf{Priority Inheritance Protocol}): Tạm thời nâng độ ưu tiên của tiến trình $L$ lên bằng mức của $H$ cho đến khi $L$ nhả khóa.
+\end{itemize}
+
+---
+
+\subsection{Ba bài toán đồng bộ kinh điển}
+
+\subsubsection{1. Bài toán Bounded-Buffer (Producer - Consumer)}
+\textbf{Khai báo tài nguyên \& Semaphore:}
+\begin{itemize}[noitemsep]
+    \item \texttt{semaphore mutex = 1;} // Đảm bảo loại trừ tương hỗ khi thao tác trên buffer
+    \item \texttt{semaphore empty = n;} // Đếm số vị trí trống còn lại (ban đầu là $n$)
+    \item \texttt{semaphore full = 0;}  // Đếm số vị trí đã có sản phẩm (ban đầu là 0)
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+// TIEN TRINH PRODUCER                     // TIEN TRINH CONSUMER
+while (true) {                             while (true) {
+    /* Tao san pham next_produced */           wait(full);         // Cho co san pham
+    wait(empty);        // Cho co cho trong    wait(mutex);        // Khoa buffer
+    wait(mutex);        // Khoa buffer         // Lay san pham khoi buffer
+    // Them san pham vao buffer                signal(mutex);      // Mo khoa buffer
+    signal(mutex);      // Mo khoa buffer      signal(empty);      // Bao them 1 cho trong
+    signal(full);       // Bao them 1 sp       /* Tieu thu san pham */
+}                                          }
+\end{lstlisting}
+\textit{Lưu ý: Bắt buộc gọi \texttt{wait(empty/full)} trước \texttt{wait(mutex)}. Nếu đảo thứ tự sẽ dẫn đến Deadlock khi bộ đệm đầy/rỗng.}
+
+\subsubsection{2. Bài toán Readers - Writers (Biến thể 1: Ưu tiên Readers)}
+\textbf{Khai báo dữ liệu chia sẻ:}
+\begin{itemize}[noitemsep]
+    \item \texttt{semaphore rw\_mutex = 1;} // Khóa dùng chung giữa Reader và Writer
+    \item \texttt{semaphore mutex = 1;}    // Bảo vệ biến đếm \texttt{read\_count}
+    \item \texttt{int read\_count = 0;}    // Đếm số Reader đang đọc
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+// TIEN TRINH WRITER                       // TIEN TRINH READER
+wait(rw_mutex);                            wait(mutex);
+/* Cap nhat du lieu */                      read_count++;
+signal(rw_mutex);                          if (read_count == 1) 
+                                               wait(rw_mutex); // Reader dau tien khoa Writer
+                                           signal(mutex);
+                                           /* Doc du lieu */
+                                           wait(mutex);
+                                           read_count--;
+                                           if (read_count == 0)
+                                               signal(rw_mutex); // Reader cuoi cung mo khoa
+                                           signal(mutex);
+\end{lstlisting}
+\textit{Đánh giá: Biến thể ưu tiên Reader có thể khiến \textbf{Writer bị đói tài nguyên (Starvation)} nếu liên tục có Reader mới đến.}
+
+\subsubsection{3. Bài toán Dining-Philosophers (Triết gia ăn tối)}
+Có 5 triết gia và 5 chiếc đũa (\texttt{semaphore chopstick[5] = \{1, 1, 1, 1, 1\}}). Triết gia $i$ cần cả đũa trái $i$ và đũa phải $(i+1)\%5$.
+\begin{itemize}[noitemsep]
+    \item \textbf{Deadlock:} Nếu cả 5 triết gia cùng nhặt đũa trái đồng thời $\rightarrow$ bế tắc vĩnh viễn.
+    \item \textbf{Các giải pháp khắc phục:}
+    \begin{enumerate}[noitemsep]
+        \item Chỉ cho phép tối đa 4 triết gia cùng ngồi vào bàn.
+        \item Chỉ cho phép nhặt đũa khi cả 2 chiếc đũa đều đang rảnh (kiểm tra trong Critical Section).
+        \item \textbf{Giải pháp bất đối xứng:} Triết gia lẻ nhặt đũa trái trước, đũa phải sau; triết gia chẵn nhặt đũa phải trước, đũa trái sau.
+    \end{enumerate}
+\end{itemize}
+
+\newpage
+% =========================================================================
+% PHẦN 2: CHƯƠNG 7
+% =========================================================================
+\section{CHƯƠNG 7: QUẢN LÝ BỘ NHỚ (MEMORY MANAGEMENT)}
+
+\subsection{Khái niệm cơ sở và Các kiểu địa chỉ nhớ}
+\begin{itemize}
+    \item \textbf{Mục tiêu quản lý bộ nhớ:} Phân phối, sắp xếp các tiến trình nhằm \textbf{tối đa hóa mức độ đa chương (Degree of Multiprogramming)}, bảo vệ không gian nhớ và hỗ trợ chia sẻ dữ liệu.
+    \item \textbf{Phân loại địa chỉ:}
+    \begin{itemize}[noitemsep]
+        \item \textbf{Địa chỉ vật lý (Physical Address):} Vị trí thực tế trên thanh RAM phần cứng.
+        \item \textbf{Địa chỉ luận lý / ảo (Logical / Virtual Address):} Địa chỉ do CPU phát ra khi thực thi chương trình.
+        \item \textbf{Địa chỉ tương đối (Relocatable / Relative Address):} Biểu diễn độ lệch tương đối so với một mốc chuẩn (ví dụ vị trí bắt đầu module).
+        \item \textbf{Địa chỉ tuyệt đối (Absolute Address):} Địa chỉ cố định tương ứng trực tiếp với địa chỉ vật lý.
+    \end{itemize}
+    \item \textbf{Linker và Loader:}
+    \begin{itemize}[noitemsep]
+        \item \textbf{Linker:} Liên kết các object modules và thư viện thành một file thực thi duy nhất (\textit{load module}).
+        \item \textbf{Loader:} Nạp \textit{load module} từ đĩa vào bộ nhớ chính để chuẩn bị thực thi.
+    \end{itemize}
+\end{itemize}
+
+---
+
+\subsection{Chuyển đổi địa chỉ (Address Binding) và Nạp/Liên kết động}
+
+\subsubsection{1. Ba thời điểm kết gán địa chỉ (Address Binding)}
+\begin{enumerate}
+    \item \textbf{Thời điểm biên dịch (Compile Time):} Tạo địa chỉ tuyệt đối nếu biết trước vị trí nạp. Bắt buộc phải biên dịch lại nếu địa chỉ nạp thay đổi (ví dụ tệp \texttt{.COM} của MS-DOS).
+    \item \textbf{Thời điểm nạp (Load Time):} Trình biên dịch tạo địa chỉ tương đối; Loader sẽ cộng địa chỉ cơ sở khi nạp vào RAM (\textit{tái định vị tĩnh}). Nếu tiến trình bị dời chỗ, phải nạp lại từ đầu.
+    \item \textbf{Thời điểm thực thi (Execution Time):} Ánh xạ địa chỉ được trì hoãn đến lúc lệnh thực sự chạy. \textbf{Cần sự hỗ trợ của phần cứng MMU} (Memory Management Unit) với các thanh ghi Base/Limit hoặc Paging. Cho phép tiến trình di chuyển linh hoạt trong RAM.
+\end{enumerate}
+
+\subsubsection{2. Nạp động (Dynamic Loading) và Liên kết động (Dynamic Linking)}
+\begin{itemize}
+    \item \textbf{Dynamic Loading:} Một thủ tục/hàm \textbf{chỉ được nạp vào RAM khi nó thực sự được gọi đến}. Tối ưu cho các đoạn mã xử lý lỗi hiếm khi xảy ra.
+    \item \textbf{Dynamic Linking:} Việc liên kết với thư viện ngoài được trì hoãn đến khi thực thi. File thực thi chứa một đoạn mã sơ khai (\textbf{stub}) để trỏ đến thư viện (\texttt{.DLL} trên Windows, \texttt{.so} trên Linux).
+    \item \textbf{Ưu điểm vượt trội của Dynamic Linking:} Cho phép cơ chế \textbf{chia sẻ mã (Code Sharing)} -- một bản sao thư viện duy nhất nạp trong RAM có thể dùng chung cho nhiều tiến trình, tiết kiệm dung lượng RAM và đĩa.
+\end{itemize}
+
+---
+
+\subsection{Các mô hình phân vùng bộ nhớ và Hiện tượng phân mảnh}
+
+\begin{summarybox}[Phân mảnh bộ nhớ (Fragmentation)]
+\begin{itemize}[noitemsep]
+    \item \textbf{Phân mảnh nội (Internal Fragmentation):} Vùng nhớ cấp phát \textbf{lớn hơn} vùng nhớ tiến trình yêu cầu. Phần dư thừa nằm bên trong khối đã cấp phát nhưng không được sử dụng. (Thường gặp trong: Fixed Partitioning, Paging).
+    \item \textbf{Phân mảnh ngoại (External Fragmentation):} Tổng vùng nhớ trống còn lại \textbf{đủ lớn} để thỏa mãn yêu cầu, nhưng các vùng trống bị \textbf{phân tán, không liên tục}. (Thường gặp trong: Dynamic Partitioning, Segmentation).
+    \item \textbf{Giải pháp cho phân mảnh ngoại:} Kỹ thuật \textbf{kết khối (Compaction)} gom các vùng nhớ trống lại thành khối liên tục (chỉ làm được khi địa chỉ được gán tại Execution time).
+\end{itemize}
+\end{summarybox}
+
+\subsubsection*{Bốn chiến lược cấp phát phân vùng động (Dynamic Placement):}
+\begin{enumerate}[noitemsep]
+    \item \textbf{First-fit:} Cấp phát khối trống \textbf{đầu tiên} đủ lớn (kể từ đầu RAM). Thuật toán \textbf{nhanh nhất}.
+    \item \textbf{Best-fit:} Cấp phát khối trống \textbf{nhỏ nhất} trong số các khối đủ lớn. Tạo ra các \textbf{mảnh vụn nhỏ nhất}.
+    \item \textbf{Worst-fit:} Cấp phát khối trống \textbf{lớn nhất}. Để lại \textbf{phần dư lớn nhất} (dễ tái sử dụng).
+    \item \textbf{Next-fit:} Tương tự First-fit nhưng bắt đầu tìm kiếm từ \textbf{vị trí vừa cấp phát trước đó}.
+\end{enumerate}
+
+---
+
+\subsection{Cơ chế Phân trang (Paging) và Bảng trang}
+\begin{itemize}
+    \item \textbf{Nguyên lý:}
+    \begin{itemize}[noitemsep]
+        \item Bộ nhớ vật lý chia thành các khối cố định gọi là \textbf{Khung trang (Frames)}.
+        \item Bộ nhớ luận lý chia thành các khối cùng kích thước gọi là \textbf{Trang (Pages)}.
+        \item Kích thước trang luôn là lũy thừa của 2 ($2^n$, thường từ 4KB đến 16MB).
+        \item \textbf{Ưu điểm:} Cho phép cấp phát bộ nhớ không liên tục; \textbf{loại bỏ hoàn toàn phân mảnh ngoại}, chỉ còn phân mảnh nội ở khung trang cuối cùng.
+    \end{itemize}
+    \item \textbf{Cấu trúc địa chỉ luận lý:} Gồm 2 phần: Số hiệu trang ($p$) và Độ lệch trong trang ($d$).
+    \begin{itemize}[noitemsep]
+        \item Không gian địa chỉ ảo kích thước $2^m$, kích thước trang $2^n$.
+        \item Độ lệch (Offset) $d$: gồm $\mathbf{n}$ bits (định vị từ $0$ đến $2^n - 1$).
+        \item Số hiệu trang (Page number) $p$: gồm $\mathbf{m - n}$ bits (định vị từ $0$ đến $2^{m-n} - 1$).
+        \item Bảng trang có tổng cộng $\mathbf{2^{m-n}}$ mục (entries).
+    \end{itemize}
+    \item \textbf{Cài đặt Bảng trang trong bộ nhớ chính:}
+    \begin{itemize}[noitemsep]
+        \item \textbf{PTBR (Page-Table Base Register):} Thanh ghi trỏ vào địa chỉ bắt đầu của bảng trang.
+        \item \textbf{PTLR (Page-Table Length Register):} Thanh ghi lưu độ dài bảng trang.
+        \item \textbf{Nhược điểm:} Tốn \textbf{2 lần truy xuất RAM} cho mỗi thao tác (Lần 1 tra bảng trang, Lần 2 đọc dữ liệu thực tế).
+    \end{itemize}
+\end{itemize}
+
+---
+
+\subsection{TLB và Thời gian truy xuất hiệu dụng (EAT)}
+\textbf{TLB (Translation Lookaside Buffer)} là bộ nhớ đệm phần cứng kết hợp tốc độ cao dùng để lưu các mục bảng trang vừa được truy cập.
+
+\begin{importantbox}[CÔNG THỨC TÍNH THỜI GIAN TRUY XUẤT HIỆU DỤNG (EAT)]
+Gọi:
+\begin{itemize}[noitemsep]
+    \item $\alpha$: Tỉ lệ tìm thấy trong TLB (Hit ratio) ($0 \le \alpha \le 1$).
+    \item $\epsilon$: Thời gian tìm kiếm trong TLB (Lookup time).
+    \item $x$: Thời gian truy xuất bộ nhớ chính (Memory access time).
+\end{itemize}
+Khi tìm thấy trong TLB (Hit): Thời gian $= \epsilon + x$.\\
+Khi không thấy trong TLB (Miss): Thời gian $= \epsilon + x + x = \epsilon + 2x$.\\
+\textbf{Công thức tổng quát:}
+\begin{equation}
+\mathbf{EAT = (\epsilon + x)\alpha + (\epsilon + 2x)(1 - \alpha) = (2 - \alpha)x + \epsilon}
+\end{equation}
+\textit{Nếu đề bài xem thời gian tra cứu TLB rất nhỏ ($\epsilon \approx 0$), công thức thu gọn:}
+\begin{equation}
+\mathbf{EAT = (2 - \alpha)x}
+\end{equation}
+\end{importantbox}
+
+---
+
+\subsection{Bảo vệ bộ nhớ và Cơ chế Hoán vị (Swapping)}
+\begin{itemize}
+    \item \textbf{Bảo vệ trong phân trang:}
+    \begin{itemize}[noitemsep]
+        \item \textbf{Protection bits:} Quy định quyền truy xuất (Read-only, Read-Write, Execute-only).
+        \item \textbf{Valid / Invalid bit:} Bit \texttt{valid} chứng tỏ trang hợp lệ và đang nằm trong RAM; bit \texttt{invalid} báo hiệu trang không hợp lệ hoặc chưa được nạp vào RAM.
+    \end{itemize}
+    \item \textbf{Cơ chế Hoán vị (Swapping):}
+    \begin{itemize}[noitemsep]
+        \item Một tiến trình có thể tạm thời bị đưa ra khỏi RAM và lưu trên bộ nhớ phụ (\textit{swap space / backing store}), sau đó được nạp lại để tiếp tục chạy.
+        \item \textbf{Chính sách hoán vị:} \textbf{Round-robin} (hết quantum time thì swap out); \textbf{Roll out, roll in} (tiến trình ưu tiên thấp bị swap out nhường chỗ cho tiến trình ưu tiên cao).
+    \end{itemize}
+\end{itemize}
+
+\newpage
+% =========================================================================
+% PHẦN 3: CHƯƠNG 8
+% =========================================================================
+\section{CHƯƠNG 8: BỘ NHỚ ẢO (VIRTUAL MEMORY)}
+
+\subsection{Tổng quan về Bộ nhớ ảo và Demand Paging}
+\begin{summarybox}[Bộ nhớ ảo (Virtual Memory)]
+Bộ nhớ ảo là kỹ thuật cho phép thực thi một tiến trình \textbf{mà không cần nạp toàn bộ tiến trình đó vào bộ nhớ vật lý}. Tách rời hoàn toàn không gian địa chỉ luận lý của người dùng khỏi không gian địa chỉ vật lý của hệ thống.
+\end{summarybox}
+
+\textbf{Ưu điểm chính:}
+\begin{itemize}[noitemsep]
+    \item Cho phép chạy các chương trình có kích thước \textbf{lớn hơn nhiều so với dung lượng RAM thực tế}.
+    \item Tăng đáng kể mức độ đa chương (\textbf{Degree of Multiprogramming}).
+    \item Giảm thiểu số lượng thao tác I/O cần thiết để nạp hoặc hoán vị tiến trình.
+\end{itemize}
+
+\textbf{Demand Paging (Phân trang theo yêu cầu):}
+\begin{itemize}[noitemsep]
+    \item Các trang của tiến trình \textbf{chỉ được nạp vào RAM khi nó thực sự được CPU truy xuất tới}.
+    \item Sử dụng cờ \texttt{valid/invalid bit} trong bảng phân trang để nhận biết trạng thái trang.
+\end{itemize}
+
+---
+
+\subsection{Quy trình xử lý lỗi trang (Page-Fault Service Routine - PFSR)}
+\textbf{Lỗi trang (Page Fault)} xảy ra khi CPU tham chiếu đến một trang có cờ \texttt{invalid} (chưa được nạp vào RAM).
+
+\begin{importantbox}[6 BƯỚC XỬ LÝ LỖI TRANG CỦA HỆ ĐIỀU HÀNH]
+\begin{enumerate}
+    \item Phần cứng MMU phát hiện bit \texttt{invalid} $\rightarrow$ Phát sinh ngắt nội bộ (\textbf{Page-fault trap}) chuyển quyền điều khiển cho OS.
+    \item OS lưu ngữ cảnh tiến trình, đưa tiến trình vào trạng thái \textbf{Blocked (Chờ I/O)}.
+    \item OS kiểm tra tính hợp lệ của địa chỉ tham chiếu:
+    \begin{itemize}[noitemsep]
+        \item Nếu địa chỉ bất hợp pháp: Hủy tiến trình (báo lỗi Segmentation Fault).
+        \item Nếu hợp pháp: Chuẩn bị nạp trang từ đĩa (\textit{backing store}).
+    \end{itemize}
+    \item OS tìm một \textbf{khung trang (frame) trống} trong RAM:
+    \begin{itemize}[noitemsep]
+        \item Nếu có frame trống: Sử dụng frame đó.
+        \item Nếu không còn frame trống: Dùng \textbf{thuật toán thay trang} để chọn một \textbf{trang nạn nhân (victim page)}. Nếu trang nạn nhân bị sửa đổi (dirty bit = 1), phải ghi nó về đĩa trước khi xóa.
+    \end{itemize}
+    \item OS phát lệnh I/O đọc nội dung trang cần thiết từ đĩa vào khung trang đã chọn.
+    \item Sau khi I/O hoàn tất (ngắt phần cứng đĩa báo hiệu): Cập nhật bảng trang (gán frame number, sửa cờ thành \texttt{valid}), đưa tiến trình về trạng thái \textbf{Ready} để thực thi lại chỉ thị gây lỗi trang.
+\end{enumerate}
+\end{importantbox}
+
+---
+
+\subsection{Các thuật toán thay thế trang (Page Replacement Algorithms)}
+
+\subsubsection{1. Thuật toán FIFO (First-In-First-Out)}
+\begin{itemize}
+    \item \textbf{Nguyên tắc:} Thay thế trang \textbf{được nạp vào bộ nhớ sớm nhất}.
+    \item \textbf{Cài đặt:} Dùng một hàng đợi Queue lưu thứ tự nạp các trang.
+    \item \textbf{Nghịch lý Belady (Belady's Anomaly):} 
+    \begin{itemize}[noitemsep]
+        \item Là hiện tượng \textbf{số lượng lỗi trang tăng lên khi số khung trang được cấp phát tăng lên}.
+        \item Chuỗi chứng minh kinh điển: \texttt{1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5}. Cấp 3 frames xảy ra 9 lỗi trang, nhưng cấp 4 frames lại tăng lên 10 lỗi trang.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{2. Thuật toán Tối ưu (OPT - Optimal)}
+\begin{itemize}
+    \item \textbf{Nguyên tắc:} Thay thế trang \textbf{sẽ lâu được sử dụng nhất trong tương lai}.
+    \item \textbf{Đặc điểm:} Cho số lỗi trang \textbf{thấp nhất tuyệt đối}; \textbf{không bị Nghịch lý Belady}.
+    \item \textbf{Tính khả thi:} \textbf{Không thể hiện thực trong thực tế} vì OS không thể dự đoán tương lai; dùng làm \textbf{thước đo chuẩn (benchmark)} để so sánh.
+\end{itemize}
+
+\subsubsection{3. Thuật toán LRU (Least Recently Used)}
+\begin{itemize}
+    \item \textbf{Nguyên tắc:} Thay thế trang \textbf{đã lâu nhất chưa được sử dụng trong quá khứ}.
+    \item \textbf{Đặc điểm:} Xấp xỉ thuật toán OPT dựa trên nguyên lý cục bộ; \textbf{không bao giờ bị Nghịch lý Belady} (thuộc nhóm giải thuật Stack).
+    \item \textbf{Chi phí:} Cần sự hỗ trợ của phần cứng (bộ đếm thời gian Counter hoặc ngăn xếp Stack liên kết đôi), chi phí quản lý tương đối cao.
+\end{itemize}
+
+---
+
+\subsection{Cấp phát khung trang (Frame Allocation)}
+\begin{itemize}
+    \item \textbf{Cấp phát tĩnh (Fixed Allocation):}
+    \begin{itemize}
+        \item \textbf{Cấp phát đều (Equal Allocation):} Chia đều $m$ khung trang cho $n$ tiến trình ($m/n$).
+        \item \textbf{Cấp phát theo tỉ lệ (Proportional Allocation):} Cấp phát dựa trên kích thước $s_i$ của tiến trình $P_i$:
+        \begin{equation}
+        a_i = \frac{s_i}{S} \times m \quad \text{với } S = \sum s_i
+        \end{equation}
+        \item \textbf{Cấp phát theo độ ưu tiên:} Cấp nhiều frame hơn cho tiến trình có mức ưu tiên cao hơn.
+    \end{itemize}
+    \item \textbf{Cấp phát động (Variable Allocation):} Thay đổi số khung trang theo thời gian thực dựa trên tần suất phát sinh lỗi trang (\textit{Page-fault frequency}).
+\end{itemize}
+
+---
+
+\subsection{Hiện tượng Trì trệ (Thrashing) và Mô hình Working-Set}
+
+\begin{summarybox}[Hiện tượng Thrashing (Trì trệ toàn hệ thống)]
+\textbf{Thrashing} là hiện tượng một tiến trình hoặc toàn hệ thống \textbf{dành nhiều thời gian cho việc hoán chuyển trang (swap in/out) hơn là thực thi lệnh}.\\
+\textbf{Hậu quả:} Tần suất lỗi trang tăng vọt, \textbf{hiệu suất CPU (CPU Utilization) sụt giảm nghiêm trọng}.\\
+\textbf{Nguyên nhân cốt lõi:} Tổng kích thước các tập cục bộ của các tiến trình vượt quá dung lượng RAM:
+\begin{equation*}
+\sum \text{Kích thước Locality} > \text{Dung lượng RAM}
+\end{equation*}
+\end{summarybox}
+
+\subsubsection*{Mô hình Working-Set (Working-Set Model):}
+\begin{itemize}
+    \item Dựa trên \textbf{nguyên lý cục bộ (Locality Principle)}: Trong một khoảng thời gian, tiến trình chỉ tập trung truy cập một nhóm trang xác định.
+    \item Định nghĩa tham số cửa sổ trượt $\Delta$ (\textit{Working-set window}).
+    \item $WS_i(t)$ là tập hợp các trang được tham chiếu trong $\Delta$ lần truy cập gần nhất của tiến trình $P_i$.
+    \item Kích thước tập làm việc: $WSS_i = |WS_i|$.
+    \item Tổng nhu cầu khung trang của hệ thống: $D = \sum WSS_i$.
+    \item \textbf{Chiến lược điều phối của Hệ điều hành:}
+    \begin{itemize}[noitemsep]
+        \item Nếu $D \le m$ (với $m$ là tổng số frames của RAM): Hệ thống ổn định.
+        \item Nếu $D > m$: Nguy cơ Thrashing! OS sẽ \textbf{tạm dừng (suspend)} một số tiến trình, swap toàn bộ trang của tiến trình đó ra đĩa để giải phóng frame cho các tiến trình còn lại đạt đủ $WSS$.
+    \end{itemize}
+\end{itemize}
+
+\newpage
+% =========================================================================
+% PHẦN 4: BÀI TẬP TÍNH TOÁN
+% =========================================================================
+\section{CÁC DẠNG BÀI TẬP TÍNH TOÁN ĐI THI (HƯỚNG DẪN CHI TIẾT)}
+
+\subsection{Dạng 1: Cấp phát bộ nhớ động (First-fit, Best-fit, Worst-fit, Next-fit)}
+\begin{examplebox}[Bài tập cấp phát phân vùng]
+\textbf{Đề bài:} Bộ nhớ chính có các phân vùng trống theo thứ tự: \texttt{600K, 500K, 200K, 300K}.\\
+Các tiến trình yêu cầu cấp phát theo thứ tự: \texttt{P1 (212K), P2 (417K), P3 (112K), P4 (426K)}.\\
+Hãy xác định phân vùng được cấp phát cho từng tiến trình theo 4 thuật toán và đánh giá thuật toán tối ưu nhất.
+\end{examplebox}
+
+\textbf{Lời giải chi tiết:}
+\begin{enumerate}
+    \item \textbf{First-fit (Khối đầu tiên đủ lớn):}
+    \begin{itemize}[noitemsep]
+        \item $P_1 (212K) \rightarrow$ Cấp vào khối \texttt{600K} (khối này còn dư $600 - 212 = 388K$).
+        \item $P_2 (417K) \rightarrow$ Cấp vào khối \texttt{500K} (còn dư $500 - 417 = 83K$).
+        \item $P_3 (112K) \rightarrow$ Cấp vào phần dư \texttt{388K} của khối đầu (còn dư $388 - 112 = 276K$).
+        \item $P_4 (426K) \rightarrow$ Các khối hiện có: 276K, 83K, 200K, 300K $\rightarrow$ Không có khối nào $\ge 426K \Rightarrow$ \textbf{P4 phải chờ}.
+    \end{itemize}
+    \item \textbf{Best-fit (Khối nhỏ nhất đủ lớn):}
+    \begin{itemize}[noitemsep]
+        \item $P_1 (212K) \rightarrow$ Chọn khối \texttt{300K} (dư $88K$).
+        \item $P_2 (417K) \rightarrow$ Chọn khối \texttt{500K} (dư $83K$).
+        \item $P_3 (112K) \rightarrow$ Chọn khối \texttt{200K} (dư $88K$).
+        \item $P_4 (426K) \rightarrow$ Chọn khối \texttt{600K} (dư $174K$).
+        \item $\Rightarrow$ \textbf{Cả 4 tiến trình đều được cấp phát thành công!}
+    \end{itemize}
+    \item \textbf{Worst-fit (Khối lớn nhất):}
+    \begin{itemize}[noitemsep]
+        \item $P_1 (212K) \rightarrow$ Chọn khối lớn nhất \texttt{600K} (còn dư $388K$).
+        \item $P_2 (417K) \rightarrow$ Khối lớn nhất hiện tại là \texttt{500K} $\rightarrow$ cấp vào 500K (dư $83K$).
+        \item $P_3 (112K) \rightarrow$ Các khối: 388K, 83K, 200K, 300K $\rightarrow$ chọn khối lớn nhất là \texttt{388K} (còn dư $276K$).
+        \item $P_4 (426K) \rightarrow$ Các khối: 276K, 83K, 200K, 300K $\rightarrow$ Không khối nào $\ge 426K \Rightarrow$ \textbf{P4 phải chờ}.
+    \end{itemize}
+    \item \textbf{Next-fit (Tiếp tục từ vị trí trước):}
+    \begin{itemize}[noitemsep]
+        \item $P_1 (212K) \rightarrow$ Cấp vào \texttt{600K} (dư $388K$). Vị trí con trỏ tại khối 600K.
+        \item $P_2 (417K) \rightarrow$ Xét tiếp khối \texttt{500K} $\rightarrow$ cấp vào 500K (dư $83K$). Con trỏ tại khối 500K.
+        \item $P_3 (112K) \rightarrow$ Xét tiếp khối \texttt{200K} $\rightarrow$ cấp vào 200K (dư $88K$). Con trỏ tại khối 200K.
+        \item $P_4 (426K) \rightarrow$ Xét khối 300K (không đủ), quay vòng về 600K (còn dư 388K - không đủ) $\Rightarrow$ \textbf{P4 phải chờ}.
+    \end{itemize}
+\end{enumerate}
+\textbf{Kết luận:} Thuật toán \textbf{Best-fit là hiệu quả nhất} trong trường hợp này vì thỏa mãn được toàn bộ 4 tiến trình.
+
+---
+
+\subsection{Dạng 2: Phân trang và Tính toán số bit địa chỉ}
+
+\begin{examplebox}[Bài toán số bit trong phân trang]
+\textbf{Đề bài 1:} Không gian địa chỉ có 12 trang, mỗi trang kích thước 2KB, ánh xạ vào bộ nhớ vật lý có 32 khung trang. Xác định số bit của: (a) Địa chỉ logic, (b) Địa chỉ physical.
+\end{examplebox}
+
+\textbf{Lời giải:}
+\begin{itemize}
+    \item Kích thước trang $= 2\text{ KB} = 2 \times 2^{10} = 2^{11}\text{ bytes} \Rightarrow$ Số bit offset: $\mathbf{d = 11\text{ bits}}$.
+    \item \textbf{Câu (a):} Để đánh số 12 trang (từ $0 \dots 11$), cần: $\lceil \log_2(12) \rceil = 4\text{ bits}$ cho số hiệu trang $p$.\\
+    $\Rightarrow$ Địa chỉ logic gồm: $p + d = 4 + 11 = \mathbf{15\text{ bits}}$ (tổng không gian nhớ là $12 \times 2\text{KB} = 24\text{KB}$).
+    \item \textbf{Câu (b):} Bộ nhớ vật lý có 32 khung trang $= 2^5$ khung trang $\Rightarrow$ cần $\mathbf{5\text{ bits}}$ cho số hiệu frame $f$.\\
+    $\Rightarrow$ Địa chỉ vật lý gồm: $f + d = 5 + 11 = \mathbf{16\text{ bits}}$ (tổng RAM là $32 \times 2\text{KB} = 64\text{KB}$).
+\end{itemize}
+
+\begin{examplebox}[Bảng trang 2 cấp]
+\textbf{Đề bài 2:} Máy tính 32-bit địa chỉ ảo, bảng trang 2 cấp: 9 bit cấp 1, 11 bit cấp 2, phần còn lại cho offset. Xác định kích thước 1 trang và số trang tối đa.
+\end{examplebox}
+\textbf{Lời giải:}
+\begin{itemize}[noitemsep]
+    \item Số bit offset $d = 32 - (9 + 11) = 32 - 20 = \mathbf{12\text{ bits}}$.
+    \item Kích thước 1 trang $= 2^{12}\text{ bytes} = \mathbf{4\text{ KB}}$.
+    \item Số lượng trang trong không gian địa chỉ ảo $= 2^{32 - 12} = 2^{20} = \mathbf{1,048,576\text{ trang (1M trang)}}$.
+\end{itemize}
+
+---
+
+\subsection{Dạng 3: Tính thời gian truy xuất hiệu dụng (EAT với TLB)}
+
+\begin{examplebox}[Tính toán EAT]
+\textbf{Đề bài:} Thời gian truy xuất RAM bình thường $x = 200\text{ ns}$.
+\begin{enumerate}[noitemsep]
+    \item[a.] Nếu bảng trang lưu trong RAM và không có TLB, thời gian truy xuất là bao nhiêu?
+    \item[b.] Nếu có TLB với hit-ratio $\alpha = 75\%$, thời gian tìm trong TLB xem như $\epsilon = 0\text{ ns}$, tính EAT?
+    \item[c.] Nếu thời gian tìm kiếm trong TLB là $\epsilon = 20\text{ ns}$ và hit-ratio $\alpha = 90\%$, tính EAT?
+\end{enumerate}
+\end{examplebox}
+
+\textbf{Lời giải:}
+\begin{enumerate}
+    \item[a.] Không có TLB, mỗi thao tác cần 2 lần vào RAM:
+    $$\text{Thời gian} = 2 \times x = 2 \times 200\text{ ns} = \mathbf{400\text{ ns}}$$
+    \item[b.] Có TLB với $\epsilon = 0$, $\alpha = 0.75$:
+    $$\text{EAT} = \alpha \times x + (1 - \alpha) \times 2x = (0.75 \times 200) + (0.25 \times 400) = 150 + 100 = \mathbf{250\text{ ns}}$$
+    \item[c.] Có TLB với $\epsilon = 20\text{ ns}$, $\alpha = 0.9$:
+    $$\text{EAT} = (\epsilon + x)\alpha + (\epsilon + 2x)(1 - \alpha) = (20 + 200) \times 0.9 + (20 + 400) \times 0.1 = 198 + 42 = \mathbf{240\text{ ns}}$$
+\end{enumerate}
+
+---
+
+\subsection{Dạng 4: Mô phỏng thuật toán thay trang (FIFO, OPT, LRU)}
+
+\begin{examplebox}[Mô phỏng thay thế trang]
+\textbf{Đề bài:} Xét chuỗi tham chiếu bộ nhớ gồm 17 phần tử sau:
+$$\mathbf{1, 2, 3, 4, 2, 1, 5, 6, 2, 1, 2, 3, 7, 6, 3, 2, 1}$$
+Hệ thống có \textbf{4 khung trang (ban đầu trống)}. Hãy đếm số lỗi trang (Page Fault) đối với: (a) FIFO, (b) OPT, (c) LRU.
+\end{examplebox}
+
+\subsubsection*{1. Thuật toán FIFO (First-In-First-Out):}
+\begin{table}[h!]
+\centering
+\scriptsize
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Chuỗi} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{2} & \textbf{1} & \textbf{5} & \textbf{6} & \textbf{2} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{7} & \textbf{6} & \textbf{3} & \textbf{2} & \textbf{1} \\ \hline
+Khung 1 & 1 & 1 & 1 & 1 & 1 & 1 & \textbf{5} & 5 & 5 & 5 & 5 & \textbf{3} & 3 & 3 & 3 & 3 & \textbf{1} \\ \hline
+Khung 2 &   & 2 & 2 & 2 & 2 & 2 & 2 & \textbf{6} & 6 & 6 & 6 & 6 & \textbf{7} & 7 & 7 & 7 & 7 \\ \hline
+Khung 3 &   &   & 3 & 3 & 3 & 3 & 3 & 3 & \textbf{2} & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 \\ \hline
+Khung 4 &   &   &   & 4 & 4 & 4 & 4 & 4 & 4 & \textbf{1} & 1 & 1 & 1 & \textbf{6} & 6 & 6 & 6 \\ \hline
+\textbf{Fault?} & \textbf{*} & \textbf{*} & \textbf{*} & \textbf{*} & & & \textbf{*} & \textbf{*} & \textbf{*} & \textbf{*} & & \textbf{*} & \textbf{*} & \textbf{*} & & & \textbf{*} \\ \hline
+\end{tabular}
+\end{table}
+$\Rightarrow$ \textbf{Tổng số lỗi trang (FIFO): 11 lỗi trang.}
+
+\subsubsection*{2. Thuật toán OPT (Optimal):}
+\begin{table}[h!]
+\centering
+\scriptsize
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Chuỗi} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{2} & \textbf{1} & \textbf{5} & \textbf{6} & \textbf{2} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{7} & \textbf{6} & \textbf{3} & \textbf{2} & \textbf{1} \\ \hline
+Khung 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & \textbf{7} & 7 & 7 & 7 & \textbf{1} \\ \hline
+Khung 2 &   & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 \\ \hline
+Khung 3 &   &   & 3 & 3 & 3 & 3 & \textbf{5} & \textbf{6} & 6 & 6 & 6 & 6 & 6 & 6 & 6 & 6 & 6 \\ \hline
+Khung 4 &   &   &   & 4 & 4 & 4 & 4 & 4 & 4 & 4 & 4 & \textbf{3} & 3 & 3 & 3 & 3 & 3 \\ \hline
+\textbf{Fault?} & \textbf{*} & \textbf{*} & \textbf{*} & \textbf{*} & & & \textbf{*} & \textbf{*} & & & & \textbf{*} & \textbf{*} & & & & \textbf{*} \\ \hline
+\end{tabular}
+\end{table}
+$\Rightarrow$ \textbf{Tổng số lỗi trang (OPT): 9 lỗi trang.}
+
+\subsubsection*{3. Thuật toán LRU (Least Recently Used):}
+\begin{table}[h!]
+\centering
+\scriptsize
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Chuỗi} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{2} & \textbf{1} & \textbf{5} & \textbf{6} & \textbf{2} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{7} & \textbf{6} & \textbf{3} & \textbf{2} & \textbf{1} \\ \hline
+Khung 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & \textbf{7} & 7 & 7 & 7 & \textbf{1} \\ \hline
+Khung 2 &   & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 \\ \hline
+Khung 3 &   &   & 3 & 3 & 3 & 3 & \textbf{5} & 5 & 5 & 5 & 5 & \textbf{3} & 3 & 3 & 3 & 3 & 3 \\ \hline
+Khung 4 &   &   &   & 4 & 4 & 4 & 4 & \textbf{6} & 6 & 6 & 6 & 6 & 6 & 6 & 6 & 6 & 6 \\ \hline
+\textbf{Fault?} & \textbf{*} & \textbf{*} & \textbf{*} & \textbf{*} & & & \textbf{*} & \textbf{*} & & & & \textbf{*} & \textbf{*} & & & & \textbf{*} \\ \hline
+\end{tabular}
+\end{table}
+$\Rightarrow$ \textbf{Tổng số lỗi trang (LRU): 10 lỗi trang.}
+
+---
+
+\subsection{Dạng 5: Cấp phát khung trang theo tỉ lệ (Proportional Allocation)}
+\begin{examplebox}[Cấp phát theo tỉ lệ]
+\textbf{Đề bài:} Hệ thống có $m = 64$ frames khả dụng. Có 2 tiến trình: $P_1$ có kích thước $s_1 = 10$ trang, $P_2$ có kích thước $s_2 = 127$ trang. Tính số frame cấp cho mỗi tiến trình.
+\end{examplebox}
+\textbf{Lời giải:}
+\begin{itemize}[noitemsep]
+    \item Tổng kích thước: $S = s_1 + s_2 = 10 + 127 = 137$ trang.
+    \item Số frame cho $P_1$: $a_1 = \frac{10}{137} \times 64 \approx 4.67 \Rightarrow \mathbf{5\text{ frames}}$.
+    \item Số frame cho $P_2$: $a_2 = \frac{127}{137} \times 64 \approx 59.33 \Rightarrow \mathbf{59\text{ frames}}$.
+\end{itemize}
+
+\newpage
+% =========================================================================
+% PHẦN 5: BẢNG SO SÁNH & CÂU HỎI NHANH
+% =========================================================================
+\section{BẢNG SO SÁNH TỔNG HỢP VÀ BỘ CÂU HỎI PHẢN XẠ NHANH}
+
+\subsection{Bảng phân biệt các khái niệm then chốt}
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\textwidth}{p{3.5cm} X X}
+\toprule
+\textbf{Tiêu chí} & \textbf{Khái niệm A} & \textbf{Khái niệm B} \\
+\midrule
+\textbf{Phân mảnh} & \textbf{Phân mảnh nội:} Vùng nhớ dư thừa \textbf{nằm bên trong} khối đã cấp (Fixed partition, Paging). & \textbf{Phân mảnh ngoại:} Vùng nhớ trống \textbf{nằm rải rác bên ngoài}, tổng đủ nhưng không liên tục (Dynamic partition). \\
+\addlinespace
+\textbf{Loading vs Linking} & \textbf{Dynamic Loading:} Chỉ nạp thủ tục vào RAM khi được gọi (tiết kiệm bộ nhớ cho code ít dùng). & \textbf{Dynamic Linking:} Dùng Stub liên kết thư viện lúc chạy, \textbf{nhiều process dùng chung một bản copy trên RAM}. \\
+\addlinespace
+\textbf{Mutex vs Semaphore} & \textbf{Mutex Lock:} Có tính chất \textbf{Ownership} (tiến trình nào khóa thì chính nó phải mở khóa). & \textbf{Binary Semaphore:} Không có ownership (tiến trình này gọi \texttt{wait}, tiến trình khác có thể gọi \texttt{signal}). \\
+\addlinespace
+\textbf{Paging vs Swapping} & \textbf{Paging:} Di chuyển từng \textbf{trang nhớ đơn lẻ} giữa RAM và đĩa (bộ nhớ ảo). & \textbf{Swapping:} Di chuyển \textbf{toàn bộ tiến trình} ra/vào bộ nhớ phụ. \\
+\addlinespace
+\textbf{FIFO vs OPT vs LRU} & \textbf{FIFO:} Dễ cài đặt nhất, \textbf{bị Nghịch lý Belady}. & \textbf{OPT:} Tối ưu nhất, không bị Belady, \textbf{không khả thi thực tế}. \textbf{LRU:} Tiệm cận OPT, không bị Belady, cần phần cứng. \\
+\bottomrule
+\end{tabularx}
+\caption{Bảng so sánh tổng hợp các cặp khái niệm dễ nhầm lẫn}
+\end{table}
+
+---
+
+\subsection{Bộ câu hỏi phản xạ nhanh lý thuyết đi thi}
+
+\begin{enumerate}
+    \item \textbf{Hỏi:} Tại sao cơ chế tắt ngắt (\textit{disable interrupts}) không giải quyết được vấn đề đồng bộ trên hệ thống đa xử lý (Multiprocessor)?\\
+    $\rightarrow$ \textbf{Đáp:} Vì lệnh tắt ngắt chỉ có hiệu lực trên chính CPU đang chạy lệnh đó. Các CPU khác trong hệ thống vẫn tiếp tục chạy và truy cập vào bộ nhớ chia sẻ bình thường.
+    
+    \item \textbf{Hỏi:} Khi Semaphore $S$ có giá trị âm ($S\text{->value} = -4$), con số đó có ý nghĩa gì?\\
+    $\rightarrow$ \textbf{Đáp:} Có chính xác \textbf{4 tiến trình đang bị tắc nghẽn (blocked)} và đang nằm chờ trong hàng đợi của Semaphore đó.
+    
+    \item \textbf{Hỏi:} Nghịch lý Belady (\textit{Belady's Anomaly}) là gì? Thường xảy ra ở thuật toán thay trang nào?\\
+    $\rightarrow$ \textbf{Đáp:} Là hiện tượng \textbf{tỷ lệ lỗi trang tăng lên khi số khung trang cấp phát cho tiến trình tăng lên}. Thuật toán điển hình mắc phải là \textbf{FIFO}.
+    
+    \item \textbf{Hỏi:} Tại sao thuật toán thay trang OPT không thể cài đặt trong các hệ điều hành thực tế?\\
+    $\rightarrow$ \textbf{Đáp:} Vì hệ điều hành không thể biết trước được chuỗi tham chiếu bộ nhớ trong tương lai của một tiến trình.
+    
+    \item \textbf{Hỏi:} Hiện tượng Thrashing xảy ra khi nào và hệ điều hành ngăn chặn nó bằng cách nào?\\
+    $\rightarrow$ \textbf{Đáp:} Xảy ra khi tổng kích thước các tập làm việc vượt quá dung lượng RAM thực tế ($D > m$). Hệ điều hành ngăn chặn bằng cách \textbf{tạm dừng (suspend)} một số tiến trình để thu hồi frame, đảm bảo các tiến trình còn lại có đủ số khung trang cho working-set của chúng.
+    
+    \item \textbf{Hỏi:} Trong bài toán Bounded-Buffer, tại sao Producer phải gọi \texttt{wait(empty)} trước \texttt{wait(mutex)}?\\
+    $\rightarrow$ \textbf{Đáp:} Nếu gọi \texttt{wait(mutex)} trước, khi buffer bị đầy, Producer sẽ giữ khóa \texttt{mutex} rồi bị kẹt ở \texttt{wait(empty)}. Lúc này Consumer muốn vào lấy hàng để giải phóng chỗ trống cũng không thể lấy được khóa \texttt{mutex} $\rightarrow$ Hệ thống rơi vào \textbf{Deadlock}.
+\end{enumerate}
+
+\end{document}
