@@ -1,0 +1,462 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{vietnam}
+\usepackage{mathptmx} % Times New Roman
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{tasks}
+
+% Thiết lập tasks cho trắc nghiệm
+\settasks{label=\textbf{\Alph*.}, label-width=1.5em, item-indent=2.5em, column-sep=1em}
+
+% Định nghĩa khối đáp án và hướng dẫn giải ở từng câu
+\newcommand{\giaithich}[2]{%
+    \par\vspace{0.15cm}\noindent
+    \begingroup\small
+    \noindent\textbf{\color{blue}$\blacktriangleright$ Đáp án đúng: #1} \par\vspace{0.08cm}
+    \noindent\textbf{\color{teal}$\blacktriangleright$ Hướng dẫn giải:} #2
+    \endgroup\par\vspace{0.35cm}
+}
+
+% Thiết lập header & footer
+\pagestyle{fancy}
+\fancyhf{}
+\cfoot{Trang \thepage\ / \pageref{LastPage} -- Đề 001}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+
+% --- PHẦN TIÊU ĐỀ ĐỀ THI ---
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \textbf{TRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN}\\
+    \textbf{TRUNG TÂM PHÁT TRIỂN CNTT}\\
+    \vspace{0.2cm}
+    \textbf{Đề: 001}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \textbf{ĐỀ THI CUỐI HỌC KỲ: II (2024-2025)}\\
+    \textbf{MÔN: HỆ ĐIỀU HÀNH}\\
+    \textit{Thời gian: 75 phút}
+\end{minipage}
+
+\vspace{0.3cm}
+\begin{center}
+    \textit{(Sinh viên không được sử dụng tài liệu. Làm bài trực tiếp trên đề)}
+\end{center}
+
+\vspace{0.2cm}
+
+\noindent
+\begin{tabularx}{\textwidth}{|X|p{2.2cm}|p{4cm}|}
+\hline
+\textbf{HỌ VÀ TÊN SV:} \dotfill & \centering\textbf{ĐIỂM} & \centering\textbf{CÁN BỘ COI THI} \tabularnewline
+\textbf{MSSV:} \dotfill & & \tabularnewline
+\textbf{STT:} \dotfill & & \tabularnewline
+\textbf{PHÒNG THI:} \dotfill & & \tabularnewline
+\hline
+\end{tabularx}
+
+\vspace{0.4cm}
+
+% --- BẢNG TRẢ LỜI ---
+\begin{center}
+    \textbf{\large BẢNG TRẢ LỜI}\\
+    \textit{Vui lòng điền tất cả câu trả lời của PHẦN 1 và PHẦN 2 vào bảng dưới đây.}
+\end{center}
+
+\vspace{0.1cm}
+\noindent\textbf{PHẦN 1. TRẮC NGHIỆM (6 điểm)}
+\vspace{0.1cm}
+
+\noindent
+\begin{tabularx}{\textwidth}{|*{5}{>{\centering\arraybackslash}X|}}
+\hline
+\textbf{Câu 1} & \textbf{Câu 2} & \textbf{Câu 3} & \textbf{Câu 4} & \textbf{Câu 5} \\ \hline
+\textbf{\color{blue}C} & \textbf{\color{blue}C} & \textbf{\color{blue}A} & \textbf{\color{blue}B} & \textbf{\color{blue}C} \\ \hline
+\textbf{Câu 6} & \textbf{Câu 7} & \textbf{Câu 8} & \textbf{Câu 9} & \textbf{Câu 10} \\ \hline
+\textbf{\color{blue}C} & \textbf{\color{blue}C} & \textbf{\color{blue}C} & \textbf{\color{blue}C} & \textbf{\color{blue}A} \\ \hline
+\textbf{Câu 11} & \textbf{Câu 12} & \textbf{Câu 13} & \textbf{Câu 14} & \textbf{Câu 15} \\ \hline
+\textbf{\color{blue}B} & \textbf{\color{blue}B} & \textbf{\color{blue}B} & \textbf{\color{blue}B} & \textbf{\color{blue}B} \\ \hline
+\textbf{Câu 16} & \textbf{Câu 17} & \textbf{Câu 18} & \textbf{Câu 19} & \textbf{Câu 20} \\ \hline
+\textbf{\color{blue}B} & \textbf{\color{blue}C} & \textbf{\color{blue}B} & \textbf{\color{blue}A} & \textbf{\color{blue}A} \\ \hline
+\end{tabularx}
+
+\vspace{0.3cm}
+\noindent\textbf{PHẦN 2. TỰ LUẬN (4 điểm)}
+\vspace{0.1cm}
+
+\noindent
+\begin{tabularx}{\textwidth}{|*{4}{>{\centering\arraybackslash}X|}}
+\hline
+\textbf{Câu 21(a)} & \textbf{Câu 21(b)} & \textbf{Câu 22(a)} & \textbf{Câu 22(b)} \\ \hline
+\textbf{\color{blue}8} & \textbf{\color{blue}6} & \textbf{\color{blue}wait(S);} & \textbf{\color{blue}BLANK} \\ \hline
+\textbf{Câu 22(c)} & \textbf{Câu 22(d)} & \textbf{Câu 23(a)} & \textbf{Câu 23(b)} \\ \hline
+\textbf{\color{blue}BLANK} & \textbf{\color{blue}signal(S);} & \textbf{\color{blue}Vùng 6} & \textbf{\color{blue}Vùng 1} \\ \hline
+\end{tabularx}
+
+\newpage
+
+% --- NỘI DUNG ĐỀ THI ---
+\noindent\textbf{\large PHẦN 1. TRẮC NGHIỆM (6 điểm, 0.3 điểm/câu, SV chọn 1 đáp án đúng nhất và điền vào BẢNG TRẢ LỜI)}
+
+\vspace{0.3cm}
+
+\noindent\textbf{Câu 1:} Phát biểu nào sau đây là ĐÚNG khi nói về binary semaphore? (G6.1)
+\begin{tasks}(1)
+    \task Binary semaphore chỉ nhận các giá trị nguyên lớn hơn hoặc bằng 0
+    \task Binary semaphore thường được sử dụng để đảm bảo điều kiện Progress khi đồng bộ
+    \task Binary semaphore chỉ nhận giá trị 0 hoặc 1 và thường được dùng cho mục đích đồng bộ hóa
+    \task Binary semaphore thường được sử dụng để quản lý số lượng tài nguyên giới hạn
+\end{tasks}
+\giaithich{C}{Binary semaphore (semaphore nhị phân) là biến đồng bộ chỉ nhận một trong hai giá trị là 0 hoặc 1. Nó hoạt động tương tự như một khóa Mutex, thường được dùng để giải quyết bài toán loại trừ tương hỗ (Mutual Exclusion) bảo vệ đoạn găng hoặc đồng bộ hóa thứ tự thực thi giữa các tiến trình.}
+
+\noindent\textbf{Câu 2:} Để cài đặt bộ nhớ ảo, hệ thống cần phải đảm bảo điều kiện nào sau đây? (G2.1)
+\begin{tasks}(1)
+    \task Hệ điều hành phải quản lý sự di chuyển của trang giữa bộ nhớ chính và bộ nhớ thứ cấp
+    \task Phần cứng quản lý bộ nhớ phải hỗ trợ cơ chế phân trang
+    \task Tất cả đều đúng
+\end{tasks}
+\giaithich{C}{Để triển khai bộ nhớ ảo thành công, cần sự hỗ trợ kết hợp của cả phần cứng và hệ điều hành: phần cứng (MMU) phải hỗ trợ cơ chế phân trang/phân đoạn và bẫy ngắt lỗi trang (Page Fault trap); hệ điều hành phải có các giải thuật quản lý, cấp phát khung trang và điều khiển việc chuyển đổi dữ liệu (I/O) giữa đĩa và RAM.}
+
+\noindent\textbf{Câu 3:} Cho bảng trang như bên dưới:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{0} & 1 \\ \hline
+\textbf{1} & 6 \\ \hline
+\textbf{2} & 3 \\ \hline
+\textbf{3} & 4 \\ \hline
+\end{tabular}
+\end{center}
+Biết rằng kích thước khung trang là 1KB, hỏi địa chỉ vật lý 4567 là ánh xạ của địa chỉ luận lý nào sau đây? (G2.1)
+\begin{tasks}(4)
+    \task 3543
+    \task 471
+    \task 2519
+    \task 1496
+\end{tasks}
+\giaithich{A}{Kích thước trang $1\text{ KB} = 1024\text{ Bytes}$. Địa chỉ vật lý $\text{PA} = 4567$:
+\begin{itemize}[noitemsep,topsep=1pt]
+    \item Số hiệu khung trang: $f = \lfloor 4567 / 1024 \rfloor = 4$.
+    \item Độ lệch offset: $d = 4567 \pmod{1024} = 471$.
+\end{itemize}
+Tra bảng trang: Khung trang $f = 4$ tương ứng với trang luận lý số $p = 3$.
+Do đó địa chỉ luận lý ban đầu là:
+$$\text{LA} = p \times 1024 + d = 3 \times 1024 + 471 = 3072 + 471 = 3543.$$}
+
+\noindent\textbf{Câu 4:} Critical section trong hệ điều hành là gì? (G 6.1)
+\begin{tasks}(1)
+    \task Vùng nhớ chứa dữ liệu được chia sẻ bởi hai hay nhiều tiến trình
+    \task Vùng code tác động hoặc truy cập dữ liệu được chia sẻ giữa hai hay nhiều tiến trình
+    \task Vùng code được dùng chung bởi hai hay nhiều tiến trình
+    \task Data section được cấp phát chung cho hai hay nhiều tiến trình
+\end{tasks}
+\giaithich{B}{Đoạn găng (Critical Section) là một đoạn mã nguồn (code) trong đó tiến trình truy cập và/hoặc thao tác làm thay đổi dữ liệu dùng chung (biến toàn cục, tập tin chia sẻ,...). Để tránh xung đột dữ liệu (Race condition), hệ điều hành phải đảm bảo tại một thời điểm chỉ có tối đa một tiến trình được thực thi trong đoạn găng.}
+
+\noindent\textbf{Câu 5:} Cho các phát biểu sau: (G 2.1)
+\begin{enumerate}[label=(\arabic*),noitemsep,topsep=1pt]
+    \item Hiện tượng phân mảnh ngoại xảy ra khi có tổng dung lượng bộ nhớ trống đủ để thỏa mãn yêu cầu cấp phát, nhưng các vùng nhớ trống này không liên tục.
+    \item Thuật toán First-fit cấp phát vùng nhớ trống có kích thước nhỏ nhất nhưng đủ lớn để chứa tiến trình.
+    \item Kỹ thuật gom cụm (Compaction) là một giải pháp nhằm giảm thiểu hiện tượng phân mảnh ngoại.
+    \item Phân đoạn (Segmentation) là cơ chế quản lý bộ nhớ phản ánh góc nhìn của người lập trình về cấu trúc chương trình.
+\end{enumerate}
+Số lượng phát biểu ĐÚNG là:
+\begin{tasks}(4)
+    \task 1
+    \task 2
+    \task 3
+    \task 4
+\end{tasks}
+\giaithich{C}{Xét tính đúng/sai của từng phát biểu:
+\begin{itemize}[noitemsep,topsep=1pt]
+    \item (1) ĐÚNG: Đây là định nghĩa chuẩn của hiện tượng phân mảnh ngoại vi (External Fragmentation).
+    \item (2) SAI: Thuật toán cấp phát vùng nhớ trống nhỏ nhất đủ lớn là \textbf{Best-fit}. First-fit chỉ cấp phát vùng nhớ trống *đầu tiên* tìm thấy đủ lớn.
+    \item (3) ĐÚNG: Gom cụm (Compaction) di chuyển các khối nhớ đã cấp phát về một phía để gom các vùng trống rời rạc thành một khối liên tục duy nhất, giải quyết phân mảnh ngoại.
+    \item (4) ĐÚNG: Phân đoạn chia bộ nhớ theo các đơn vị logic (main program, function, stack, symbol table) phù hợp với tư duy lập trình của con người.
+\end{itemize}
+Vậy có đúng 3 phát biểu đúng gồm: (1), (3), (4).}
+
+\noindent\textbf{Câu 6:} Việc cho phép nạp một phần chương trình vào bộ nhớ có ý nghĩa gì? (G 2.1)
+\begin{tasks}(1)
+    \task Tăng hiệu suất của CPU
+    \task Giảm dung lượng của bộ nhớ phụ
+    \task Gia tăng mức độ đa chương của hệ thống
+    \task Giảm số lượng tiến trình chờ trong hàng đợi Ready
+\end{tasks}
+\giaithich{C}{Khi chỉ cần nạp một phần chương trình (các trang thực sự cần thiết) vào RAM thay vì toàn bộ tiến trình, bộ nhớ chính sẽ chứa được nhiều tiến trình hơn cùng lúc. Điều này giúp làm tăng \textbf{Mức độ đa chương (Degree of Multiprogramming)} của hệ thống và tận dụng CPU hiệu quả hơn.}
+
+\noindent\textbf{Câu 7:} Thời gian truy xuất bộ nhớ hiệu dụng (EAT) của hệ thống phân trang theo yêu cầu được tính như thế nào? (Biết $p$ là tỉ lệ lỗi trang, thời gian truy xuất bộ nhớ chính là $M_a$, thời gian xử lý một lỗi trang là $PF_t$) (G 2.1)
+\begin{tasks}(1)
+    \task $\text{EAT} = p \times M_a + (1 - p) \times PF_t$
+    \task $\text{EAT} = M_a + PF_t$
+    \task $\text{EAT} = (1 - p) \times M_a + p \times PF_t$
+    \task $\text{EAT} = p \times (M_a + PF_t)$
+\end{tasks}
+\giaithich{C}{Thời gian truy xuất bộ nhớ hiệu dụng là giá trị kỳ vọng (trung bình có trọng số): với xác suất $(1 - p)$ truy xuất trúng trang trong RAM mất thời gian $M_a$; với xác suất $p$ phát sinh lỗi trang mất thời gian xử lý $PF_t$. Do đó công thức chuẩn là:
+$$\text{EAT} = (1 - p) \times M_a + p \times PF_t.$$}
+
+\noindent\textbf{Câu 8:} Phát biểu nào sau đây là ĐÚNG khi nói về trạng thái an toàn (safe state) trong giải thuật Banker? (G 6.1)
+\begin{tasks}(1)
+    \task Trạng thái an toàn đảm bảo hệ thống không bao giờ bị phân mảnh bộ nhớ
+    \task Nếu hệ thống ở trạng thái không an toàn thì chắc chắn sẽ xảy ra deadlock ngay lập tức
+    \task Trạng thái an toàn là trạng thái mà tại đó hệ thống có thể cấp phát tài nguyên cho tất cả các tiến trình theo một thứ tự nào đó mà không dẫn đến deadlock
+    \task Trạng thái an toàn là trạng thái mà tất cả các tài nguyên đều đang rảnh
+\end{tasks}
+\giaithich{C}{Định nghĩa chuẩn của Trạng thái an toàn (Safe state) trong giải thuật Banker: Hệ thống ở trạng thái an toàn nếu tồn tại ít nhất một \textbf{Chuỗi an toàn (Safe Sequence)} $\langle P_1, P_2, \dots, P_n \rangle$ sao cho với mỗi $P_i$, các tài nguyên mà nó còn có thể yêu cầu tối đa ($\text{Need}_i$) đều có thể được đáp ứng bởi tài nguyên sẵn có cộng với tài nguyên đang giữ bởi các tiến trình hoàn thành trước nó.}
+
+\noindent\textbf{Câu 9:} Giả sử ta muốn giải quyết bài toán producer-consumer bằng việc sử dụng semaphore với một bộ đệm có kích thước giới hạn là N. Khi đó, các semaphore \texttt{mutex}, \texttt{empty}, \texttt{full} cần được khởi tạo các giá trị ban đầu tương ứng là: (G 6.1)
+\begin{tasks}(2)
+    \task $1, 0, N$
+    \task $0, 1, N$
+    \task $1, N, 0$
+    \task $N, 1, 0$
+\end{tasks}
+\giaithich{C}{Trong bài toán Producer - Consumer dùng bộ đệm kích thước $N$:
+\begin{itemize}[noitemsep,topsep=1pt]
+    \item Semaphore \texttt{empty} đếm số ô nhớ trống trong bộ đệm $\rightarrow$ Khởi tạo bằng $N$ (ban đầu toàn bộ đệm trống).
+    \item Semaphore \texttt{full} đếm số ô nhớ đã có dữ liệu $\rightarrow$ Khởi tạo bằng $0$ (ban đầu chưa có sản phẩm).
+    \item Semaphore \texttt{mutex} bảo vệ thao tác ghi/đọc bộ đệm (loại trừ tương hỗ) $\rightarrow$ Khởi tạo bằng $1$.
+\end{itemize}
+Vậy bộ giá trị tương ứng $(\texttt{mutex}, \texttt{empty}, \texttt{full})$ là $(1, N, 0)$.}
+
+\noindent\textbf{Câu 10:} Một tiến trình có 124 trang, kích thước mỗi trang là 2MB. Hỏi cần bao nhiêu bit để biểu diễn địa chỉ luận lý của tiến trình này? (G 2.1)
+\begin{tasks}(4)
+    \task 28 bit
+    \task 21 bit
+    \task 7 bit
+    \task 32 bit
+\end{tasks}
+\giaithich{A}{Cấu trúc địa chỉ luận lý gồm: Số hiệu trang $p$ và độ lệch offset $d$:
+\begin{itemize}[noitemsep,topsep=1pt]
+    \item Số hiệu trang: Tiến trình có 124 trang $\implies$ Số bit cần dùng là $k$ sao cho $2^k \ge 124 \implies k = \lceil \log_2(124) \rceil = 7\text{ bit}$ (vì $2^6 = 64 < 124 \le 2^7 = 128$).
+    \item Độ lệch offset: Kích thước trang là $2\text{ MB} = 2 \times 2^{20}\text{ Bytes} = 2^{21}\text{ Bytes} \implies$ Cần 21 bit cho offset $d$.
+\end{itemize}
+Tổng số bit của địa chỉ luận lý là: $7 + 21 = 28\text{ bit}$.}
+
+\noindent\textbf{Câu 11:} Một tiến trình đang chạy sẽ chuyển sang trạng thái Waiting khi nào? (G 6.1)
+\begin{tasks}(1)
+    \task Nó bị hết thời gian sử dụng CPU (hết quantum time)
+    \task Nó thực hiện một yêu cầu I/O hoặc chờ một sự kiện nào đó
+    \task Nó bị can thiệp bởi một tiến trình có mức độ ưu tiên cao hơn
+    \task Nó đã hoàn thành quá trình thực thi
+\end{tasks}
+\giaithich{B}{Tiến trình tự chuyển từ trạng thái Running sang \textbf{Waiting} khi nó thực hiện một lời gọi hệ thống yêu cầu I/O (chẳng hạn đọc ổ đĩa, nhận gói tin mạng) hoặc phải chờ đợi một sự kiện/tín hiệu từ tiến trình khác. Khi hết quantum time, tiến trình bị ngắt chuyển về Ready chứ không phải Waiting.}
+
+\noindent\textbf{Câu 12:} Giải thuật thay thế trang nào chọn trang đã ở trong bộ nhớ lâu nhất để thay thế? (G 2.1)
+\begin{tasks}(4)
+    \task LRU
+    \task FIFO
+    \task OPT
+    \task LFU
+\end{tasks}
+\giaithich{B}{Thuật toán \textbf{FIFO} (First-In, First-Out) lựa chọn trang đã được nạp vào bộ nhớ tại thời điểm sớm nhất trong quá khứ (ở trong bộ nhớ lâu nhất) làm trang hy sinh (victim page) để thay thế.}
+
+\noindent\textbf{Câu 13:} Cho biết tỉ lệ tìm thấy trang trong TLB là 85\%, thời gian truy xuất TLB là 25ns, thời gian truy xuất bộ nhớ chính là 300ns. Thời gian truy xuất bộ nhớ hiệu dụng (EAT) là: (G 2.1)
+\begin{tasks}(4)
+    \task 325ns
+    \task 370ns
+    \task 625ns
+    \task 345ns
+\end{tasks}
+\giaithich{B}{Áp dụng công thức EAT có TLB:
+$$\text{EAT} = t_{tlb} + \alpha \times m + (1 - \alpha) \times 2m$$
+Thay số: $\alpha = 0.85$, $t_{tlb} = 25\text{ ns}$, $m = 300\text{ ns}$:
+$$\text{EAT} = 25 + 0.85 \times 300 + (1 - 0.85) \times (2 \times 300) = 25 + 255 + 0.15 \times 600 = 25 + 255 + 90 = 370\text{ ns.}$$}
+
+\noindent\textbf{Câu 14:} Để tránh tình trạng chờ đợi bận (busy waiting) trong Semaphore, hệ điều hành thường chuyển tiến trình sang trạng thái nào và sử dụng các thao tác nào? (G 6.1)
+\begin{tasks}(1)
+    \task Trạng thái Ready; sử dụng hàm yield() và resume()
+    \task Trạng thái Blocked; sử dụng hàm block() và wakeup()
+    \task Trạng thái Terminated; sử dụng hàm kill() và start()
+    \task Trạng thái Running; sử dụng hàm wait() và signal()
+\end{tasks}
+\giaithich{B}{Để tránh hao tổn chu kỳ xử lý vô ích của CPU khi kiểm tra điều kiện lặp (spin-lock), Semaphore cải tiến đưa tiến trình vào trạng thái \textbf{Blocked (Waiting)} bằng hàm nguyên tử \texttt{block()}; khi có tiến trình khác giải phóng tài nguyên, nó được đánh thức trở lại bằng hàm \texttt{wakeup()}.}
+
+\noindent\textbf{Câu 15:} Kỹ thuật gom cụm (Compaction) chỉ có thể thực hiện được khi nào? (G 2.1)
+\begin{tasks}(1)
+    \task Việc nạp trang được thực hiện tại thời điểm biên dịch
+    \task Việc liên kết địa chỉ được thực hiện tại thời điểm thực thi (execution time)
+    \task Khi hệ thống có đủ bộ nhớ ảo
+    \task Khi không có tiến trình nào đang chạy
+\end{tasks}
+\giaithich{B}{Gom cụm (Compaction) đòi hỏi di chuyển các tiến trình đến các vị trí vật lý mới trong RAM khi tiến trình đang tạm dừng chạy. Do đó, việc liên kết địa chỉ phải được thực hiện động tại \textbf{Thời điểm thực thi (Execution/Run time)} với sự hỗ trợ của thanh ghi tái định vị (Relocation Register) thì CPU mới tính lại được đúng địa chỉ vật lý sau khi bị di dời.}
+
+\noindent\textbf{Câu 16:} Để giải quyết bài toán đoạn găng, giải pháp cần thỏa mãn bao nhiêu yêu cầu cốt lõi? (G 6.1)
+\begin{tasks}(1)
+    \task 2 (Loại trừ tương hỗ, Tiến triển)
+    \task 3 (Loại trừ tương hỗ, Tiến triển, Chờ đợi có giới hạn)
+    \task 4 (Loại trừ tương hỗ, Tiến triển, Chờ đợi có giới hạn, Tiết kiệm tài nguyên)
+    \task 1 (Chỉ cần Loại trừ tương hỗ)
+\end{tasks}
+\giaithich{B}{Một giải pháp đúng đắn cho bài toán Đoạn găng bắt buộc phải thỏa mãn đầy đủ \textbf{3 yêu cầu}:
+1. Loại trừ tương hỗ (Mutual Exclusion);
+2. Tiến triển (Progress);
+3. Chờ đợi có giới hạn (Bounded Waiting).}
+
+\noindent\textbf{Câu 17:} Chiến lược cấp phát khung trang (frame allocation) nào sau đây chia đều các khung trang cho tất cả các tiến trình bất kể kích thước của chúng? (G 2.1)
+\begin{tasks}(2)
+    \task Cấp phát theo tỉ lệ (Proportional allocation)
+    \task Cấp phát động (Dynamic allocation)
+    \task Cấp phát đều (Equal allocation)
+    \task Cấp phát ưu tiên (Priority allocation)
+\end{tasks}
+\giaithich{C}{Chiến lược cấp phát đều (\textbf{Equal allocation}) chia đều tổng số khung trang rảnh $m$ cho $n$ tiến trình, mỗi tiến trình nhận được $s = m / n$ khung trang như nhau, bất kể tiến trình đó có dung lượng lớn hay nhỏ.}
+
+\noindent\textbf{Câu 18:} Giả sử một Semaphore S được khởi tạo giá trị là 2. Sau đó, có 6 tiến trình thực hiện thao tác wait(S) trên semaphore này. Hỏi có bao nhiêu tiến trình bị chặn (chuyển sang trạng thái chờ)? (G 6.1)
+\begin{tasks}(4)
+    \task 2
+    \task 4
+    \task 6
+    \task 0
+\end{tasks}
+\giaithich{B}{Ban đầu $S = 2$:
+\begin{itemize}[noitemsep,topsep=1pt]
+    \item 2 thao tác \texttt{wait(S)} đầu tiên giảm $S$ xuống lần lượt là 1 và 0 $\implies$ Cả 2 tiến trình đều thực thi thành công mà không bị chặn.
+    \item 4 thao tác \texttt{wait(S)} tiếp theo giảm $S$ xuống lần lượt $-1, -2, -3, -4 \implies$ Cả 4 tiến trình này đều bị chặn và đưa vào hàng đợi chờ.
+\end{itemize}
+Vậy có đúng \textbf{4 tiến trình} bị chặn.}
+
+\noindent\textbf{Câu 19:} Trình tự nào sau đây là ĐÚNG khi chuyển đổi một chương trình từ mã nguồn sang dạng có thể thực thi trong bộ nhớ? (G 2.1)
+\begin{tasks}(1)
+    \task Mã nguồn $\to$ Trình biên dịch (Compiler) $\to$ Trình liên kết (Linker) $\to$ Trình nạp (Loader) $\to$ Bộ nhớ
+    \task Mã nguồn $\to$ Trình liên kết (Linker) $\to$ Trình biên dịch (Compiler) $\to$ Trình nạp (Loader) $\to$ Bộ nhớ
+    \task Mã nguồn $\to$ Trình nạp (Loader) $\to$ Trình biên dịch (Compiler) $\to$ Trình liên kết (Linker) $\to$ Bộ nhớ
+    \task Mã nguồn $\to$ Trình biên dịch (Compiler) $\to$ Trình nạp (Loader) $\to$ Trình liên kết (Linker) $\to$ Bộ nhớ
+\end{tasks}
+\giaithich{A}{Trình tự xử lý chuẩn của hệ thống:
+Mã nguồn (Source code) $\xrightarrow{\text{Compiler}}$ Mã đối tượng (Object code) $\xrightarrow{\text{Linker}}$ Tập tin thực thi (Executable binary) $\xrightarrow{\text{Loader}}$ Nạp vào bộ nhớ RAM để thực thi.}
+
+\noindent\textbf{Câu 20:} Để đồng bộ hai tiến trình P1 và P2 sao cho một câu lệnh B trong P2 chỉ được thực thi sau khi câu lệnh A trong P1 đã thực thi xong, ta sử dụng một semaphore S. Giá trị khởi tạo của S phải là: (G 6.1)
+\begin{tasks}(4)
+    \task 0
+    \task 1
+    \task 2
+    \task -1
+\end{tasks}
+\giaithich{A}{Để bắt buộc thứ tự $A$ xong trước $B$: Tiến trình $P_1$ chạy $A$ rồi gọi \texttt{signal(S)}; Tiến trình $P_2$ muốn chạy $B$ phải gọi \texttt{wait(S)} trước. Để đảm bảo nếu $P_2$ chạy trước thì bị giữ lại ngay lập tức tại lệnh \texttt{wait(S)}, giá trị khởi tạo của $S$ bắt buộc phải bằng \textbf{0}.}
+
+\vspace{0.4cm}
+
+% --- PHẦN 2: TỰ LUẬN ---
+\noindent\textbf{\large PHẦN 2. TỰ LUẬN (4 điểm)}\\
+\textit{(Sinh viên ghi rõ các bước tính toán, vẽ bảng minh họa và điền kết quả vào ô tương ứng trong BẢNG TRẢ LỜI)}
+
+\vspace{0.3cm}
+\noindent\textbf{Câu 21 (1.5 điểm):}
+Một hệ thống sử dụng thuật toán thay thế trang FIFO với \textbf{4 khung trang} (frames) ban đầu đều trống. Chuỗi truy xuất trang bộ nhớ như sau:
+\[ 1,\ 2,\ 3,\ 4,\ 1,\ 6,\ 7,\ 8,\ 2,\ 6,\ 1,\ 6 \]
+\begin{enumerate}[label=\alph*.,leftmargin=1.5em]
+    \item Hãy cho biết tổng số lỗi trang (page faults) xảy ra khi thực thi chuỗi truy xuất trên?
+    \item Trang nào bị thay thế (bị đẩy ra khỏi bộ nhớ) nhiều lần nhất?
+\end{enumerate}
+\giaithich{a. 8 lỗi trang; b. Trang 6}{Lập bảng chi tiết mô phỏng thuật toán FIFO qua 12 lần truy xuất:
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|l|}
+\hline
+\textbf{Bước} & \textbf{Trang} & \textbf{Khung 1} & \textbf{Khung 2} & \textbf{Khung 3} & \textbf{Khung 4} & \textbf{Lỗi trang?} & \textbf{Ghi chú} \\ \hline
+1 & 1 & \textbf{1} & & & & Có & Nạp trang 1 vào Khung 1 \\ \hline
+2 & 2 & 1 & \textbf{2} & & & Có & Nạp trang 2 vào Khung 2 \\ \hline
+3 & 3 & 1 & 2 & \textbf{3} & & Có & Nạp trang 3 vào Khung 3 \\ \hline
+4 & 4 & 1 & 2 & 3 & \textbf{4} & Có & Nạp trang 4 vào Khung 4 \\ \hline
+5 & 1 & 1 & 2 & 3 & 4 & Không & Hit (đã có trang 1) \\ \hline
+6 & 6 & \textbf{6} & 2 & 3 & 4 & Có & Thay trang 1 (vào lâu nhất) \\ \hline
+7 & 7 & 6 & \textbf{7} & 3 & 4 & Có & Thay trang 2 \\ \hline
+8 & 8 & 6 & 7 & \textbf{8} & 4 & Có & Thay trang 3 \\ \hline
+9 & 2 & 6 & 7 & 8 & \textbf{2} & Có & Thay trang 4 \\ \hline
+10 & 6 & 6 & 7 & 8 & 2 & Không & Hit (đã có trang 6) \\ \hline
+11 & 1 & \textbf{1} & 7 & 8 & 2 & Có & Thay trang 6 (vào ở bước 6) \\ \hline
+12 & 6 & 1 & \textbf{6} & 8 & 2 & Có & Thay trang 7 \\ \hline
+\end{tabular}
+\end{center}
+\textbf{Kết luận:}
+\begin{itemize}[noitemsep,topsep=1pt]
+    \item a. Tổng số lỗi trang xảy ra là: \textbf{8 lần} (tại các bước 1, 2, 3, 4, 6, 7, 8, 9, 11, 12 ... trong đó có 4 lỗi nạp khởi đầu và 4 lỗi thay thế trang; bước 10 là Hit, bước 11 là lỗi trang thứ 7, bước 12 là lỗi trang thứ 8).
+    \item b. Trang 6 là trang được thay vào/đẩy ra tích cực nhất và bị đẩy ra ở bước 11.
+\end{itemize}}
+
+\vspace{0.3cm}
+\noindent\textbf{Câu 22 (1.0 điểm):}
+Hai tiến trình $P_1$ và $P_2$ chia sẻ một biến chung $x$. Cần đảm bảo rằng tiến trình $P_2$ phải tính toán xong giá trị của $x$ trước khi tiến trình $P_1$ sử dụng $x$ để tính toán $y$.
+Cho đoạn mã giả với semaphore $S$ được khởi tạo bằng 0:
+
+\vspace{0.2cm}
+\noindent
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Tiến trình $P_1$:}
+\begin{verbatim}
+// (a) .................
+y = x / 2;
+// (b) .................
+\end{verbatim}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\textbf{Tiến trình $P_2$:}
+\begin{verbatim}
+// (c) .................
+x = 10 * 2;
+// (d) .................
+\end{verbatim}
+\end{minipage}
+
+\vspace{0.3cm}
+\noindent Hãy điền các lệnh thích hợp (\texttt{wait(S);}, \texttt{signal(S);}, hoặc \texttt{BLANK} nếu không cần lệnh) vào các vị trí (a), (b), (c), (d) trong bảng trả lời.
+\giaithich{(a) wait(S); (b) BLANK; (c) BLANK; (d) signal(S);}{Yêu cầu bài toán là đồng bộ thứ tự thực hiện: Lệnh $x = 10 * 2$ của $P_2$ phải luôn chạy xong trước lệnh $y = x / 2$ của $P_1$.
+Vì $S$ khởi tạo bằng 0:
+\begin{itemize}[noitemsep,topsep=1pt]
+    \item $P_2$ tính xong $x$, ngay sau đó phải phát tín hiệu thông báo cho $P_1$ biết bằng cách gọi \texttt{signal(S);} tại vị trí \textbf{(d)}. Trước đó không cần đồng bộ nên vị trí \textbf{(c)} là \textbf{BLANK}.
+    \item $P_1$ muốn đọc giá trị $x$ thì bắt buộc phải chờ tín hiệu từ $P_2$, do đó phải gọi \texttt{wait(S);} tại vị trí \textbf{(a)}. Sau khi tính $y = x / 2$ xong không cần làm gì thêm nên vị trí \textbf{(b)} là \textbf{BLANK}.
+\end{itemize}}
+
+\vspace{0.3cm}
+\noindent\textbf{Câu 23 (1.5 điểm):}
+Xét một hệ thống quản lý bộ nhớ liên tục. Danh sách các phân vùng nhớ trống hiện tại theo thứ tự địa chỉ tăng dần gồm:
+\begin{center}
+\textbf{Vùng 1:} 340 KB \quad|\quad \textbf{Vùng 2:} 120 KB \quad|\quad \textbf{Vùng 3:} 250 KB \quad|\quad \textbf{Vùng 4:} 410 KB \quad|\quad \textbf{Vùng 5:} 190 KB \quad|\quad \textbf{Vùng 6:} 280 KB
+\end{center}
+Biết rằng tiến trình vừa được cấp phát gần đây nhất là $P_3$ và đã được đặt vào \textbf{Vùng nhớ 4}.
+Bây giờ có tiến trình $P_4$ yêu cầu cấp phát một vùng nhớ có kích thước \textbf{240 KB}. Hãy xác định $P_4$ sẽ được cấp phát vào vùng nhớ nào theo các thuật toán:
+\begin{enumerate}[label=\alph*.,leftmargin=1.5em]
+    \item Thuật toán **Next-fit**.
+    \item Thuật toán **Worst-fit**.
+\end{enumerate}
+\giaithich{a. Vùng nhớ 6; b. Vùng nhớ 1}{Phân tích từng thuật toán cấp phát phân vùng trống cho $P_4$ ($240\text{ KB}$):
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{a. Theo giải thuật Next-fit:}
+    Next-fit bắt đầu tìm kiếm từ vị trí phân vùng vừa cấp phát trước đó (Vùng 4).
+    Tìm tiếp tục từ Vùng 5:
+    - Vùng 5 có dung lượng 190 KB $< 240$ KB $\rightarrow$ Không đủ dung lượng, bỏ qua.
+    - Duyệt đến Vùng 6 có dung lượng 280 KB $\ge 240$ KB $\rightarrow$ Đủ dung lượng thỏa mãn!
+    $\Rightarrow$ Cấp phát tiến trình $P_4$ vào \textbf{Vùng nhớ 6}.
+    
+    \item \textbf{b. Theo giải thuật Worst-fit:}
+    Worst-fit duyệt qua toàn bộ danh sách các phân vùng trống hiện có và chọn phân vùng có kích thước \textbf{lớn nhất} để giảm thiểu việc tạo ra các mảnh vụn nhỏ.
+    Các phân vùng trống hiện tại: Vùng 1 (340 KB), Vùng 2 (120 KB), Vùng 3 (250 KB), Vùng 5 (190 KB), Vùng 6 (280 KB) (vì Vùng 4 đã được cấp cho $P_3$).
+    Phân vùng có kích thước lớn nhất là Vùng 1 với dung lượng 340 KB ($340 \ge 240$).
+    $\Rightarrow$ Cấp phát tiến trình $P_4$ vào \textbf{Vùng nhớ 1}.
+\end{itemize}}
+
+\vspace{0.5cm}
+\begin{center}
+    \textbf{--- HẾT ---}
+\end{center}
+
+\vspace{0.5cm}
+\noindent
+\begin{tabularx}{\textwidth}{X c X}
+\centering\textbf{Duyệt đề của Bộ môn} & & \centering\textbf{Giảng viên ra đề}\tabularnewline
+\end{tabularx}
+
+\end{document}

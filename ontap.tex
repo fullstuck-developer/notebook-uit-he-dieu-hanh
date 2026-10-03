@@ -1,5 +1,6 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{vietnam}
+\usepackage{mathptmx} % Sử dụng font Times New Roman (URW Times)
 \usepackage[left=2cm,right=2cm,top=2.5cm,bottom=2.5cm,headheight=18pt]{geometry}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{xcolor}
@@ -750,53 +751,179 @@ $$\mathbf{1, 2, 3, 4, 2, 1, 5, 6, 2, 1, 2, 3, 7, 6, 3, 2, 1}$$
 Hệ thống có \textbf{4 khung trang (ban đầu trống)}. Hãy đếm số lỗi trang (Page Fault) đối với: (a) FIFO, (b) OPT, (c) LRU.
 \end{examplebox}
 
-\subsubsection*{1. Thuật toán FIFO (First-In-First-Out):}
-\begin{table}[h!]
-\centering
-\scriptsize
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-\hline
-\textbf{Chuỗi} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{2} & \textbf{1} & \textbf{5} & \textbf{6} & \textbf{2} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{7} & \textbf{6} & \textbf{3} & \textbf{2} & \textbf{1} \\ \hline
-Khung 1 & 1 & 1 & 1 & 1 & 1 & 1 & \textbf{5} & 5 & 5 & 5 & 5 & \textbf{3} & 3 & 3 & 3 & 3 & \textbf{1} \\ \hline
-Khung 2 &   & 2 & 2 & 2 & 2 & 2 & 2 & \textbf{6} & 6 & 6 & 6 & 6 & \textbf{7} & 7 & 7 & 7 & 7 \\ \hline
-Khung 3 &   &   & 3 & 3 & 3 & 3 & 3 & 3 & \textbf{2} & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 \\ \hline
-Khung 4 &   &   &   & 4 & 4 & 4 & 4 & 4 & 4 & \textbf{1} & 1 & 1 & 1 & \textbf{6} & 6 & 6 & 6 \\ \hline
-\textbf{Fault?} & \textbf{*} & \textbf{*} & \textbf{*} & \textbf{*} & & & \textbf{*} & \textbf{*} & \textbf{*} & \textbf{*} & & \textbf{*} & \textbf{*} & \textbf{*} & & & \textbf{*} \\ \hline
-\end{tabular}
-\end{table}
-$\Rightarrow$ \textbf{Tổng số lỗi trang (FIFO): 11 lỗi trang.}
+\subsubsection*{1. Thuật toán FIFO (First-In-First-Out - Vào trước ra trước):}
+\begin{itemize}[noitemsep]
+    \item \textbf{Nguyên lý:} Trang nào được nạp vào bộ nhớ sớm nhất (thời điểm vào $t_{\text{in}}$ nhỏ nhất) sẽ bị thay thế trước khi cần nạp trang mới và bộ nhớ đã đầy.
+    \item \textbf{Lưu ý khi làm bài:} Khi xảy ra \textbf{Hit} (trang truy xuất đã có sẵn trong khung), thứ tự và thời điểm vào của trang đó \textbf{không thay đổi}.
+\end{itemize}
 
-\subsubsection*{2. Thuật toán OPT (Optimal):}
 \begin{table}[h!]
 \centering
 \scriptsize
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
 \textbf{Chuỗi} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{2} & \textbf{1} & \textbf{5} & \textbf{6} & \textbf{2} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{7} & \textbf{6} & \textbf{3} & \textbf{2} & \textbf{1} \\ \hline
-Khung 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & \textbf{7} & 7 & 7 & 7 & \textbf{1} \\ \hline
-Khung 2 &   & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 \\ \hline
-Khung 3 &   &   & 3 & 3 & 3 & 3 & \textbf{5} & \textbf{6} & 6 & 6 & 6 & 6 & 6 & 6 & 6 & 6 & 6 \\ \hline
-Khung 4 &   &   &   & 4 & 4 & 4 & 4 & 4 & 4 & 4 & 4 & \textbf{3} & 3 & 3 & 3 & 3 & 3 \\ \hline
-\textbf{Fault?} & \textbf{*} & \textbf{*} & \textbf{*} & \textbf{*} & & & \textbf{*} & \textbf{*} & & & & \textbf{*} & \textbf{*} & & & & \textbf{*} \\ \hline
+Khung 1 & \textbf{1} & 1 & 1 & 1 & 1 & 1 & \textbf{5} & 5 & 5 & 5 & 5 & \textbf{3} & 3 & 3 & 3 & 3 & \textbf{1} \\ \hline
+Khung 2 &   & \textbf{2} & 2 & 2 & 2 & 2 & 2 & \textbf{6} & 6 & 6 & 6 & 6 & \textbf{7} & 7 & 7 & 7 & 7 \\ \hline
+Khung 3 &   &   & \textbf{3} & 3 & 3 & 3 & 3 & 3 & \textbf{2} & 2 & 2 & 2 & 2 & \textbf{6} & 6 & 6 & 6 \\ \hline
+Khung 4 &   &   &   & \textbf{4} & 4 & 4 & 4 & 4 & 4 & \textbf{1} & 1 & 1 & 1 & 1 & 1 & \textbf{2} & 2 \\ \hline
+\textbf{Fault?} & \textbf{*} & \textbf{*} & \textbf{*} & \textbf{*} & & & \textbf{*} & \textbf{*} & \textbf{*} & \textbf{*} & & \textbf{*} & \textbf{*} & \textbf{*} & & \textbf{*} & \textbf{*} \\ \hline
 \end{tabular}
 \end{table}
-$\Rightarrow$ \textbf{Tổng số lỗi trang (OPT): 9 lỗi trang.}
 
-\subsubsection*{3. Thuật toán LRU (Least Recently Used):}
+\textbf{Diễn giải các bước thay thế quan trọng (FIFO):}
+\begin{itemize}[noitemsep]
+    \item Bước 1--4: Lần lượt nạp 1, 2, 3, 4 vào 4 khung trống $\Rightarrow$ 4 lỗi trang.
+    \item Bước 5 (trang 2) \& Bước 6 (trang 1): Đã có sẵn trong RAM $\Rightarrow$ Hit.
+    \item Bước 7 (trang 5): Thay trang 1 ở Khung 1 ($t_{\text{in}}=1$ sớm nhất). Khung: $\{5, 2, 3, 4\}$.
+    \item Bước 8 (trang 6): Thay trang 2 ở Khung 2 ($t_{\text{in}}=2$ sớm nhất). Khung: $\{5, 6, 3, 4\}$.
+    \item Bước 9 (trang 2): Thay trang 3 ở Khung 3 ($t_{\text{in}}=3$ sớm nhất). Khung: $\{5, 6, 2, 4\}$.
+    \item Bước 10 (trang 1): Thay trang 4 ở Khung 4 ($t_{\text{in}}=4$ sớm nhất). Khung: $\{5, 6, 2, 1\}$.
+    \item Bước 11 (trang 2): Hit (đã có ở Khung 3).
+    \item Bước 12 (trang 3): Thay trang 5 ở Khung 1 ($t_{\text{in}}=7$ sớm nhất). Khung: $\{3, 6, 2, 1\}$.
+    \item Bước 13 (trang 7): Thay trang 6 ở Khung 2 ($t_{\text{in}}=8$ sớm nhất). Khung: $\{3, 7, 2, 1\}$.
+    \item Bước 14 (trang 6): Thay trang 2 ở Khung 3 ($t_{\text{in}}=9$ sớm nhất). Khung: $\{3, 7, 6, 1\}$.
+    \item Bước 15 (trang 3): Hit (đã có ở Khung 1).
+    \item Bước 16 (trang 2): Thay trang 1 ở Khung 4 ($t_{\text{in}}=10$ sớm nhất). Khung: $\{3, 7, 6, 2\}$.
+    \item Bước 17 (trang 1): Thay trang 3 ở Khung 1 ($t_{\text{in}}=12$ sớm nhất). Khung: $\{1, 7, 6, 2\}$.
+\end{itemize}
+$\Rightarrow$ \textbf{Tổng số lỗi trang (FIFO): 13 lỗi trang.}
+
+\subsubsection*{2. Thuật toán OPT (Optimal Page Replacement - Thay thế tối ưu):}
+\begin{itemize}[noitemsep]
+    \item \textbf{Nguyên lý:} Nhìn về \textbf{tương lai} (từ sau vị trí hiện tại nhìn sang phải). Thay thế trang nào \textbf{lâu được dùng lại nhất} hoặc \textbf{không bao giờ được dùng lại nữa} ($\infty$).
+    \item \textbf{Quy tắc ưu tiên:} Trang nào không bao giờ xuất hiện lại trong tương lai bắt buộc phải ưu tiên thay thế trước!
+\end{itemize}
+
 \begin{table}[h!]
 \centering
 \scriptsize
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
 \textbf{Chuỗi} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{2} & \textbf{1} & \textbf{5} & \textbf{6} & \textbf{2} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{7} & \textbf{6} & \textbf{3} & \textbf{2} & \textbf{1} \\ \hline
-Khung 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & \textbf{7} & 7 & 7 & 7 & \textbf{1} \\ \hline
-Khung 2 &   & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 \\ \hline
-Khung 3 &   &   & 3 & 3 & 3 & 3 & \textbf{5} & 5 & 5 & 5 & 5 & \textbf{3} & 3 & 3 & 3 & 3 & 3 \\ \hline
-Khung 4 &   &   &   & 4 & 4 & 4 & 4 & \textbf{6} & 6 & 6 & 6 & 6 & 6 & 6 & 6 & 6 & 6 \\ \hline
-\textbf{Fault?} & \textbf{*} & \textbf{*} & \textbf{*} & \textbf{*} & & & \textbf{*} & \textbf{*} & & & & \textbf{*} & \textbf{*} & & & & \textbf{*} \\ \hline
+Khung 1 & \textbf{1} & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & \textbf{7} & 7 & 7 & 7 & \textbf{1} \\ \hline
+Khung 2 &   & \textbf{2} & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 \\ \hline
+Khung 3 &   &   & \textbf{3} & 3 & 3 & 3 & 3 & 3 & 3 & 3 & 3 & 3 & 3 & 3 & 3 & 3 & 3 \\ \hline
+Khung 4 &   &   &   & \textbf{4} & 4 & 4 & \textbf{5} & \textbf{6} & 6 & 6 & 6 & 6 & 6 & 6 & 6 & 6 & 6 \\ \hline
+\textbf{Fault?} & \textbf{*} & \textbf{*} & \textbf{*} & \textbf{*} & & & \textbf{*} & \textbf{*} & & & & & \textbf{*} & & & & \textbf{*} \\ \hline
 \end{tabular}
 \end{table}
+
+\textbf{Hướng dẫn giải chi tiết từng cột (Cột 1 đến Cột 17):}
+\begin{enumerate}[label=\textbf{Cột \arabic*:}, leftmargin=*, itemsep=2pt]
+    \item \textbf{Trang 1:} Khung 1 còn trống $\rightarrow$ Nạp 1 vào Khung 1 $\Rightarrow$ \textbf{Lỗi trang (*)}. Khung: $\{1, -, -, -\}$.
+    \item \textbf{Trang 2:} Khung 2 còn trống $\rightarrow$ Nạp 2 vào Khung 2 $\Rightarrow$ \textbf{Lỗi trang (*)}. Khung: $\{1, 2, -, -\}$.
+    \item \textbf{Trang 3:} Khung 3 còn trống $\rightarrow$ Nạp 3 vào Khung 3 $\Rightarrow$ \textbf{Lỗi trang (*)}. Khung: $\{1, 2, 3, -\}$.
+    \item \textbf{Trang 4:} Khung 4 còn trống $\rightarrow$ Nạp 4 vào Khung 4 $\Rightarrow$ \textbf{Lỗi trang (*)}. Khung: $\{1, 2, 3, 4\}$ (đầy 4 khung).
+    \item \textbf{Trang 2:} Đã có sẵn ở Khung 2 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{1, 2, 3, 4\}$.
+    \item \textbf{Trang 1:} Đã có sẵn ở Khung 1 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{1, 2, 3, 4\}$.
+    \item \textbf{Trang 5:} Chưa có $\rightarrow$ \textbf{Lỗi trang (*)}. Khung đầy $\{1, 2, 3, 4\}$, soi tương lai phía sau (Cột 8--17: \texttt{6, 2, 1, 2, 3, 7, 6, 3, 2, 1}):
+    \begin{itemize}[noitemsep]
+        \item Trang 2 xuất hiện ở Cột 9; Trang 1 ở Cột 10; Trang 3 ở Cột 12.
+        \item Trang 4 \textbf{không bao giờ xuất hiện lại nữa} ($\infty$) $\Rightarrow$ Chọn trang 4 làm victim.
+    \end{itemize}
+    Thay trang 4 bằng 5 ở Khung 4. Khung sau bước 7: $\{1, 2, 3, 5\}$.
+    \item \textbf{Trang 6:} Chưa có $\rightarrow$ \textbf{Lỗi trang (*)}. Khung đầy $\{1, 2, 3, 5\}$, soi tương lai phía sau (Cột 9--17: \texttt{2, 1, 2, 3, 7, 6, 3, 2, 1}):
+    \begin{itemize}[noitemsep]
+        \item Trang 2 ở Cột 9; Trang 1 ở Cột 10; Trang 3 ở Cột 12.
+        \item Trang 5 \textbf{không bao giờ xuất hiện lại nữa} ($\infty$) $\Rightarrow$ Chọn trang 5 làm victim.
+    \end{itemize}
+    Thay trang 5 bằng 6 ở Khung 4. Khung sau bước 8: $\{1, 2, 3, 6\}$.
+    \item \textbf{Trang 2:} Đã có sẵn ở Khung 2 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{1, 2, 3, 6\}$.
+    \item \textbf{Trang 1:} Đã có sẵn ở Khung 1 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{1, 2, 3, 6\}$.
+    \item \textbf{Trang 2:} Đã có sẵn ở Khung 2 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{1, 2, 3, 6\}$.
+    \item \textbf{Trang 3:} Đã có sẵn ở Khung 3 $\Rightarrow$ \textbf{Hit} (nhờ bước 7 đã giữ lại trang 3). Khung giữ nguyên: $\{1, 2, 3, 6\}$.
+    \item \textbf{Trang 7:} Chưa có $\rightarrow$ \textbf{Lỗi trang (*)}. Khung đầy $\{1, 2, 3, 6\}$, soi tương lai phía sau (Cột 14--17: \texttt{6, 3, 2, 1}):
+    \begin{itemize}[noitemsep]
+        \item Trang 6 ở Cột 14 (cách 1); Trang 3 ở Cột 15 (cách 2); Trang 2 ở Cột 16 (cách 3).
+        \item Trang 1 ở Cột 17 (\textbf{xa nhất trong 4 trang}) $\Rightarrow$ Chọn trang 1 làm victim.
+    \end{itemize}
+    Thay trang 1 bằng 7 ở Khung 1. Khung sau bước 13: $\{7, 2, 3, 6\}$.
+    \item \textbf{Trang 6:} Đã có sẵn ở Khung 4 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{7, 2, 3, 6\}$.
+    \item \textbf{Trang 3:} Đã có sẵn ở Khung 3 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{7, 2, 3, 6\}$.
+    \item \textbf{Trang 2:} Đã có sẵn ở Khung 2 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{7, 2, 3, 6\}$.
+    \item \textbf{Trang 1:} Chưa có $\rightarrow$ \textbf{Lỗi trang (*)}. Tương lai không còn trang nào nữa, trang 7 không dùng nữa $\rightarrow$ Thay trang 7 bằng 1 ở Khung 1. Khung sau bước 17: $\{1, 2, 3, 6\}$.
+\end{enumerate}
+$\Rightarrow$ \textbf{Tổng số lỗi trang (OPT): 8 lỗi trang.}
+
+\subsubsection*{3. Thuật toán LRU (Least Recently Used - Lâu nhất chưa sử dụng):}
+\begin{itemize}[noitemsep]
+    \item \textbf{Nguyên lý:} Nhìn về \textbf{quá khứ} (từ vị trí hiện tại nhìn ngược về bên trái). Thay thế trang có lần truy xuất gần nhất cách xa hiện tại nhất.
+    \item \textbf{Mẹo làm bài nhanh:} Dò ngược chuỗi tham chiếu từ phải qua trái. 3 trang đầu tiên bắt gặp sẽ được giữ lại, trang thứ 4 gặp sau cùng trong khung chính là nạn nhân (victim).
+\end{itemize}
+
+\begin{table}[h!]
+\centering
+\scriptsize
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Chuỗi} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{2} & \textbf{1} & \textbf{5} & \textbf{6} & \textbf{2} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{7} & \textbf{6} & \textbf{3} & \textbf{2} & \textbf{1} \\ \hline
+Khung 1 & \textbf{1} & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & \textbf{6} & 6 & 6 & 6 \\ \hline
+Khung 2 &   & \textbf{2} & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 \\ \hline
+Khung 3 &   &   & \textbf{3} & 3 & 3 & 3 & \textbf{5} & 5 & 5 & 5 & 5 & \textbf{3} & 3 & 3 & 3 & 3 & 3 \\ \hline
+Khung 4 &   &   &   & \textbf{4} & 4 & 4 & 4 & \textbf{6} & 6 & 6 & 6 & 6 & \textbf{7} & 7 & 7 & 7 & \textbf{1} \\ \hline
+\textbf{Fault?} & \textbf{*} & \textbf{*} & \textbf{*} & \textbf{*} & & & \textbf{*} & \textbf{*} & & & & \textbf{*} & \textbf{*} & \textbf{*} & & & \textbf{*} \\ \hline
+\end{tabular}
+\end{table}
+
+\textbf{Hướng dẫn giải chi tiết từng cột (Cột 1 đến Cột 17):}
+\begin{enumerate}[label=\textbf{Cột \arabic*:}, leftmargin=*, itemsep=2pt]
+    \item \textbf{Trang 1:} Khung 1 còn trống $\rightarrow$ Nạp 1 vào Khung 1 $\Rightarrow$ \textbf{Lỗi trang (*)}. Khung: $\{1, -, -, -\}$. Thứ tự dùng gần $\rightarrow$ xa: $(1)$.
+    \item \textbf{Trang 2:} Khung 2 còn trống $\rightarrow$ Nạp 2 vào Khung 2 $\Rightarrow$ \textbf{Lỗi trang (*)}. Khung: $\{1, 2, -, -\}$. Thứ tự dùng: $(2, 1)$.
+    \item \textbf{Trang 3:} Khung 3 còn trống $\rightarrow$ Nạp 3 vào Khung 3 $\Rightarrow$ \textbf{Lỗi trang (*)}. Khung: $\{1, 2, 3, -\}$. Thứ tự dùng: $(3, 2, 1)$.
+    \item \textbf{Trang 4:} Khung 4 còn trống $\rightarrow$ Nạp 4 vào Khung 4 $\Rightarrow$ \textbf{Lỗi trang (*)}. Khung: $\{1, 2, 3, 4\}$ (đầy 4 khung). Thứ tự dùng: $(4, 3, 2, 1)$.
+    \item \textbf{Trang 2:} Đã có sẵn ở Khung 2 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{1, 2, 3, 4\}$. Cập nhật thứ tự dùng (2 lên đầu): $(2, 4, 3, 1)$.
+    \item \textbf{Trang 1:} Đã có sẵn ở Khung 1 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{1, 2, 3, 4\}$. Cập nhật thứ tự dùng (1 lên đầu): $(1, 2, 4, 3)$.
+    \item \textbf{Trang 5:} Chưa có $\rightarrow$ \textbf{Lỗi trang (*)}. Khung đầy $\{1, 2, 3, 4\}$, dò ngược về quá khứ từ Cột 6 sang trái:
+    \begin{itemize}[noitemsep]
+        \item Cột 6 gặp 1; Cột 5 gặp 2; Cột 4 gặp 4; Cột 3 mới gặp 3 (\textbf{xa nhất về bên trái}).
+        \item $\Rightarrow$ Trang 3 lâu nhất chưa dùng $\Rightarrow$ Chọn trang 3 làm victim.
+    \end{itemize}
+    Thay trang 3 bằng 5 ở Khung 3. Khung sau bước 7: $\{1, 2, 5, 4\}$. Thứ tự dùng: $(5, 1, 2, 4)$.
+    \item \textbf{Trang 6:} Chưa có $\rightarrow$ \textbf{Lỗi trang (*)}. Khung đầy $\{1, 2, 5, 4\}$, dò ngược về quá khứ từ Cột 7 sang trái:
+    \begin{itemize}[noitemsep]
+        \item Cột 7 gặp 5; Cột 6 gặp 1; Cột 5 gặp 2; Cột 4 mới gặp 4 (\textbf{xa nhất về bên trái}).
+        \item $\Rightarrow$ Trang 4 lâu nhất chưa dùng $\Rightarrow$ Chọn trang 4 làm victim.
+    \end{itemize}
+    Thay trang 4 bằng 6 ở Khung 4. Khung sau bước 8: $\{1, 2, 5, 6\}$. Thứ tự dùng: $(6, 5, 1, 2)$.
+    \item \textbf{Trang 2:} Đã có sẵn ở Khung 2 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{1, 2, 5, 6\}$. Thứ tự dùng: $(2, 6, 5, 1)$.
+    \item \textbf{Trang 1:} Đã có sẵn ở Khung 1 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{1, 2, 5, 6\}$. Thứ tự dùng: $(1, 2, 6, 5)$.
+    \item \textbf{Trang 2:} Đã có sẵn ở Khung 2 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{1, 2, 5, 6\}$. Thứ tự dùng: $(2, 1, 6, 5)$.
+    \item \textbf{Trang 3:} Chưa có $\rightarrow$ \textbf{Lỗi trang (*)}. Khung đầy $\{1, 2, 5, 6\}$, dò ngược về quá khứ từ Cột 11 sang trái:
+    \begin{itemize}[noitemsep]
+        \item Cột 11 gặp 2; Cột 10 gặp 1; Cột 8 gặp 6; Cột 7 mới gặp 5 (\textbf{xa nhất về bên trái}).
+        \item $\Rightarrow$ Trang 5 lâu nhất chưa dùng $\Rightarrow$ Chọn trang 5 làm victim.
+    \end{itemize}
+    Thay trang 5 bằng 3 ở Khung 3. Khung sau bước 12: $\{1, 2, 3, 6\}$. Thứ tự dùng: $(3, 2, 1, 6)$.
+    \item \textbf{Trang 7:} Chưa có $\rightarrow$ \textbf{Lỗi trang (*)}. Khung đầy $\{1, 2, 3, 6\}$, dò ngược về quá khứ từ Cột 12 sang trái:
+    \begin{itemize}[noitemsep]
+        \item Cột 12 gặp 3; Cột 11 gặp 2; Cột 10 gặp 1; Cột 8 mới gặp 6 (\textbf{xa nhất về bên trái}).
+        \item $\Rightarrow$ Trang 6 lâu nhất chưa dùng $\Rightarrow$ Chọn trang 6 làm victim.
+    \end{itemize}
+    Thay trang 6 bằng 7 ở Khung 4. Khung sau bước 13: $\{1, 2, 3, 7\}$. Thứ tự dùng: $(7, 3, 2, 1)$.
+    \item \textbf{Trang 6:} Chưa có $\rightarrow$ \textbf{Lỗi trang (*)}. Khung đầy $\{1, 2, 3, 7\}$, dò ngược về quá khứ từ Cột 13 sang trái:
+    \begin{itemize}[noitemsep]
+        \item Cột 13 gặp 7; Cột 12 gặp 3; Cột 11 gặp 2; Cột 10 mới gặp 1 (\textbf{xa nhất về bên trái}).
+        \item $\Rightarrow$ Trang 1 lâu nhất chưa dùng $\Rightarrow$ Chọn trang 1 làm victim.
+    \end{itemize}
+    Thay trang 1 bằng 6 ở Khung 1. Khung sau bước 14: $\{6, 2, 3, 7\}$. Thứ tự dùng: $(6, 7, 3, 2)$.
+    \item \textbf{Trang 3:} Đã có sẵn ở Khung 3 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{6, 2, 3, 7\}$. Thứ tự dùng: $(3, 6, 7, 2)$.
+    \item \textbf{Trang 2:} Đã có sẵn ở Khung 2 $\Rightarrow$ \textbf{Hit}. Khung giữ nguyên: $\{6, 2, 3, 7\}$. Thứ tự dùng: $(2, 3, 6, 7)$.
+    \item \textbf{Trang 1:} Chưa có $\rightarrow$ \textbf{Lỗi trang (*)}. Khung đầy $\{6, 2, 3, 7\}$, dò ngược về quá khứ từ Cột 16 sang trái:
+    \begin{itemize}[noitemsep]
+        \item Cột 16 gặp 2; Cột 15 gặp 3; Cột 14 gặp 6; Cột 13 mới gặp 7 (\textbf{xa nhất về bên trái}).
+        \item $\Rightarrow$ Trang 7 lâu nhất chưa dùng $\Rightarrow$ Chọn trang 7 làm victim.
+    \end{itemize}
+    Thay trang 7 bằng 1 ở Khung 4. Khung sau bước 17: $\{6, 2, 3, 1\}$.
+\end{enumerate}
 $\Rightarrow$ \textbf{Tổng số lỗi trang (LRU): 10 lỗi trang.}
+
+\begin{importantbox}[So sánh phản xạ nhanh khi làm bài thi]
+\begin{itemize}[noitemsep]
+    \item \textbf{Số lỗi trang:} $\text{OPT } (8) \le \text{LRU } (10) \le \text{FIFO } (13)$. Thuật toán OPT luôn cho số lỗi trang ít nhất.
+    \item \textbf{Nghịch lý Belady:} Chỉ có \textbf{FIFO} có thể bị nghịch lý Belady (tăng số khung trang nhưng số lỗi trang lại tăng). \textbf{OPT} và \textbf{LRU} thuộc nhóm \textit{Stack Algorithms} nên không bao giờ bị nghịch lý này.
+\end{itemize}
+\end{importantbox}
 
 ---
 
